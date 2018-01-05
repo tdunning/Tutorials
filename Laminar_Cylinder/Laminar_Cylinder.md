@@ -15,7 +15,7 @@ In this tutorial, we discuss some numerical method options, including how to act
 
 ## Resources
 
-The resources for this tutorial can be found in the Tutorials/Laminar_Cylinder directory. You will need the configuration file ([lam_cylinder.cfg](lam_cylinder.cfg)) and the mesh file ([mesh_cylinder_lam.su2](mesh_cylinder_lam.su2)).
+The resources for this tutorial can be found in the [Laminar_Cylinder](https://github.com/su2code/Tutorials/tree/master/Laminar_Cylinder) directory in the [tutorials repository](https://github.com/su2code/Tutorials/tree/master/). You will need the configuration file ([lam_cylinder.cfg](lam_cylinder.cfg)) and the mesh file ([mesh_cylinder_lam.su2](mesh_cylinder_lam.su2)).
 
 Experimental results for drag over a cylinder at low Reynolds numbers are reported in the following article:
 D. J. Tritton, "Experiments on the flow past a circular cylinder at low Reynolds numbers," Journal of Fluid Mechanics, Vol. 6, No. 4, pp. 547-567, 1959. 
