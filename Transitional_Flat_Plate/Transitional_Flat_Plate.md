@@ -15,7 +15,7 @@ Upon completing this tutorial, the user will be familiar with performing an exte
 
 ## Resources
 
-The resources for this tutorial can be found in the Tutorials/Transitional_Flat_Plate directory. You will need the configuration file ([transitional_BC_model_ConfigFile.cfg](transitional_BC_model_ConfigFile.cfg)) and the mesh file ([grid.su2](grid.su2)).
+The resources for this tutorial can be found in the [Transitional_Flat_Plate](https://github.com/su2code/Tutorials/tree/master/Transitional_Flat_Plate) directory in the [tutorials repository](https://github.com/su2code/Tutorials/tree/master/). You will need the configuration file ([transitional_BC_model_ConfigFile.cfg](transitional_BC_model_ConfigFile.cfg)) and the mesh file ([grid.su2](grid.su2)).
 Additionally, experimental skin friction data corresponding to this test case is provided in the TestCases repository (All_ZeroPresGrad_FlatPlateExperiments.dat).
 
 ## Tutorial
