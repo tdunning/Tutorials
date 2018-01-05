@@ -59,14 +59,14 @@ The governing equations are Navier-Stokes, but by entering "SA" as the option fo
 ### Running SU2
 
 To run this test case, follow these steps at a terminal command line:
- 1. Copy the config file (turb_SA_flatplate.cfg) and/or the mesh file (mesh_flatplate_turb_137x97.su2) so that they are in the same directory. Move to the directory containing the config file and the mesh file. Make sure that the SU2 tools were compiled, installed, and that their install location was added to your path.
+ 1. Copy the config file ([turb_SA_flatplate.cfg](turb_SA_flatplate.cfg)) and/or the mesh file ([mesh_flatplate_turb_137x97.su2](mesh_flatplate_turb_137x97.su2)) so that they are in the same directory. Move to the directory containing the config file and the mesh file. Make sure that the SU2 tools were compiled, installed, and that their install location was added to your path.
  2. Run the executable by entering "SU2_CFD turb_SA_flatplate.cfg" at the command line.
  3. SU2 will print residual updates with each iteration of the flow solver, and the simulation will finish upon reaching the specified convergence criteria.
  4. Files containing the results will be written upon exiting SU2. The flow solution can be visualized in ParaView (.vtk) or Tecplot (.dat for ASCII).
 
 ### Results
 
-The figures below show results obtained from SU2 and compared to several results from NASA codes. Note that the SU2 results for the skin friction correspond to the coarser mesh (mesh_flatplate_turb_137x97.su2) while the NASA results are based on the finer mesh (mesh_flatplate_turb_545x385.su2). SU2 still matches very closely.
+The figures below show results obtained from SU2 and compared to several results from NASA codes. Note that the SU2 results for the skin friction correspond to the coarser mesh ([mesh_flatplate_turb_137x97.su2](mesh_flatplate_turb_137x97.su2)) while the NASA results are based on the finer mesh ([mesh_flatplate_turb_545x385.su2](mesh_flatplate_turb_545x385.su2)). SU2 still matches very closely.
 
 ![Turb Plate Nu Tilde](images/turb_plate_nu_tilde.png)
 Figure (2): Contour of turbulence variable (nu-hat).
