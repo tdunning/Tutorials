@@ -17,7 +17,7 @@ In this tutorial, we perform our first RANS simulation with the Spalart-Allmaras
 
 ## Resources
 
-The resources for this tutorial can be found in the Tutorials/Turbulent_Flat_Plate directory. You will need the configuration file ([turb_SA_flatplate.cfg](turb_SA_flatplate.cfg)) and either of the two available mesh files ([mesh_flatplate_turb_137x97.su2](mesh_flatplate_turb_137x97.su2) or [mesh_flatplate_turb_545x385.su2](mesh_flatplate_turb_545x385.su2)). The configuration file can be found in the SU2 repository whereas the mesh files can be found in the Tutorials repository.
+The resources for this tutorial can be found in the [Turbulent_Flat_Plate](https://github.com/su2code/Tutorials/tree/master/Turbulent_Flat_Plate) directory in the [tutorials repository](https://github.com/su2code/Tutorials/tree/master/). You will need the configuration file ([turb_SA_flatplate.cfg](turb_SA_flatplate.cfg)) and either of the two available mesh files ([mesh_flatplate_turb_137x97.su2](mesh_flatplate_turb_137x97.su2) or [mesh_flatplate_turb_545x385.su2](mesh_flatplate_turb_545x385.su2)). 
 
 Additionally, skin friction and velocity profiles corresponding to this testcase (obtained from the Langley Research Center Turbulence Modeling Resource website shown below) are used for later comparison with SU2 results. These files can be found on the following website: http://turbmodels.larc.nasa.gov/flatplate.html.
 
