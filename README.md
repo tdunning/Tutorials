@@ -32,11 +32,11 @@
   - Inlet, Outlet, Symmetry, and Navier-Stokes Wall boundary conditions
   - Cauchy convergence criteria
 * [Turbulent Flat Plate](Turbulent_Flat_Plate/Turbulent_Flat_Plate) - Simulation of external, turbulent flow over a flat plate
- - Steady, 2D RANS Navier-Stokes equations 
- - Spalart-Allmaras turbulence model
- - Roe 2nd-order numerical scheme in space
- - Euler implicit time integration
- - Inlet, Outlet, and Navier-Stokes Wall boundary conditions
+  - Steady, 2D RANS Navier-Stokes equations 
+  - Spalart-Allmaras turbulence model
+  - Roe 2nd-order numerical scheme in space
+  - Euler implicit time integration
+  - Inlet, Outlet, and Navier-Stokes Wall boundary conditions
 * [Transitional Flat Plate](Transitional_Flat_Plate/Transitional_Flat_Plate) - Simulation of external, transitional flow over a flat plate
   - Steady, 2D, incompressible RANS equations
   - Spalart-Allmaras (S-A) turbulence model with Bas-Cakmakcioglu (B-C) transition model
