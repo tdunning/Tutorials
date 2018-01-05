@@ -24,7 +24,7 @@ The following tutorial will walk you through the steps required when performing 
 
 ### Problem Setup
 
-The goal of this wing design problem is to minimize the coefficient of drag by changing the shape while imposing lift and wing section thickness constraints. As design variables, we will use a free-form deformation approach. In this approach, a lattice of control points making up a bounding box are placed around the geometry, and the movement of these control points smoothly deforms the surface shape of the geometry inside. We begin with a 3D fixed-wing geometry (initially the ONERA M6) at transonic speed in air (inviscid). The flow conditions are the same as for the previous [[Inviscid ONERA M6]] tutorial.
+The goal of this wing design problem is to minimize the coefficient of drag by changing the shape while imposing lift and wing section thickness constraints. As design variables, we will use a free-form deformation approach. In this approach, a lattice of control points making up a bounding box are placed around the geometry, and the movement of these control points smoothly deforms the surface shape of the geometry inside. We begin with a 3D fixed-wing geometry (initially the ONERA M6) at transonic speed in air (inviscid). The flow conditions are the same as for the previous  [Inviscid ONERA M6](https://su2code.github.io/Tutorials/Inviscid_OneraM6/Inviscid_OneraM6) tutorial.
 
 ![Opt. ONERA Grid](images/onera_grid.png)
 Figure (1): View of the initial surface computational mesh.
