@@ -33,3 +33,6 @@ Perform an optimal shape design of a 2D geometry
 * [Constrained Optimal Shape Design of a Fixed Wing](Constrained_Optimal_Shape_Design/Constrained_Optimal_Shape_Design)    
 Perform an optimal shape design of a 3D geometry
 
+Contribute
+------------
+You want to contribute a tutorial ? Just create a fork of the [Tutorials repository](https://github.com/su2code/Tutorials), write your tutorial and open a pull request.
