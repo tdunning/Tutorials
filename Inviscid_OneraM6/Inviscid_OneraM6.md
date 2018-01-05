@@ -17,7 +17,7 @@ We will also discuss the details for setting up 3D flow conditions and some of t
 
 ## Resources
 
-The resources for this tutorial can be found in the Tutorials/Inviscid_OneraM6 directory. You will need the configuration file ([inv_ONERAM6.cfg](inv_ONERAM6.cfg)) and the mesh file ([mesh_ONERAM6_inv_ffd.su2](mesh_ONERAM6_inv_ffd.su2)).
+The resources for this tutorial can be found in the [Inviscid_OneraM6](https://github.com/su2code/Tutorials/tree/master/Inviscid_OneraM6) directory in the [tutorials repository](https://github.com/su2code/Tutorials/tree/master/). You will need the configuration file ([inv_ONERAM6.cfg](inv_ONERAM6.cfg)) and the mesh file ([mesh_ONERAM6_inv_ffd.su2](mesh_ONERAM6_inv_ffd.su2)).
 
 ## Tutorial
 
