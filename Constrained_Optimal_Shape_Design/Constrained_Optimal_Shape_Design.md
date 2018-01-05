@@ -29,7 +29,7 @@ Figure (1): View of the initial surface computational mesh.
 
 ### Mesh Description
 
-The mesh consists of a far-field boundary divided in three surfaces (XNORMAL_FACES, ZNORMAL_FACES, YNORMAL_FACES), an Euler wall (flow tangency) divided into three surfaces (UPPER_SIDE, LOWER_SIDE, TIP), and a symmetry plane (SYMMETRY_FACE). The baseline mesh is the same as for the previous [[Inviscid ONERA M6]] tutorial. The surface mesh can be seen in Figure (1).
+The mesh consists of a far-field boundary divided in three surfaces (XNORMAL_FACES, ZNORMAL_FACES, YNORMAL_FACES), an Euler wall (flow tangency) divided into three surfaces (UPPER_SIDE, LOWER_SIDE, TIP), and a symmetry plane (SYMMETRY_FACE). The baseline mesh is the same as for the previous [Inviscid ONERA M6](https://su2code.github.io/Tutorials/Inviscid_OneraM6/Inviscid_OneraM6) tutorial. The surface mesh can be seen in Figure (1).
 
 ![Opt. ONERA FFD](images/onera_ffd.png)
 Figure (2): View of the initial FFD box around the ONERA M6 wing, including the control points (spheres).
@@ -67,7 +67,7 @@ As the current implementation requires each FFD box to be a quadrilaterally-face
 
 In the example above, we are creating a box with control point dimensions 11, 9, and 2 in the x-, y-, and z-directions, respectively, for a total of 198 available control points. In the FFD_DEFINITION option, we give a name to the box ("WING"), and then list out the x, y, and z coordinates of each corner point. The order is important, and you can use the example above to match the convention. The degree is then specified in the FFD_DEGREE option. A view of the box with the control points numbered is in Figure (3). Note that the numbering in the figure is 1-based just for visualization, but within SU2, the control points have 0-based indexing. For example, the (1,1,1) control point in the figure is control point (0,0,0) within SU2. This is critical for specifying the design variables in the config file.
 
-![Opt. ONERA FFD](onera_ffd_points.png)
+![Opt. ONERA FFD](images/onera_ffd_points.png)
 Figure (3): View of the control point identifying indices, which increase in value along the positive coordinate directions. Note that the numbering here is 1-based just for visualization, but within SU2, the control points have 0-based indexing.
 
 Lastly, the FFD capabilities within SU2 also feature a nifty technique to automatically ensure that you do not obtain any jumps or kinks in your deformed geometry. You can control this by requesting continuity in the 1st or 2nd derivative of the surface with the FFD_CONTINUITY option. In short, the code will automatically detect when a face of the FFD box intersects the geometry, and it will hold fixed the control points on that face (1ST_DERIVATIVE) or the points on the face as well as one slice of adjacent control points (2ND_DERIVATIVE). **Note that these control points will be held fixed during design cycles even if you specify them in your design variable list**.
