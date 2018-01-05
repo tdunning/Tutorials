@@ -69,7 +69,7 @@ For laminar flow around the cylinder, the 2nd-order Roe upwinding method showed 
 ### Running SU2
 
 The cylinder simulation for the 13,336 node mesh is small and will execute relatively quickly on a single workstation or laptop in serial. To run this test case, follow these steps at a terminal command line:
- 1. Move to the directory containing the configuration file (lam_cylinder.cfg) and the mesh file (mesh_cylinder_lam.su2). Make sure that the SU2 tools were compiled, installed, and that their install location was added to your path.
+ 1. Move to the directory containing the configuration file ([lam_cylinder.cfg](lam_cylinder.cfg)) and the mesh file ([mesh_cylinder_lam.su2](mesh_cylinder_lam.su2)). Make sure that the SU2 tools were compiled, installed, and that their install location was added to your path.
  2. Run the executable by entering "SU2_CFD lam_cylinder.cfg" at the command line.
  3. SU2 will print residual updates with each iteration of the flow solver, and the simulation will terminate after meeting the specified convergence criteria.
  4. Files containing the results will be written upon exiting SU2. The flow solution can be visualized in ParaView (.vtk) or Tecplot (.dat for ASCII).
