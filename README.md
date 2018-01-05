@@ -1,3 +1,6 @@
+Information on how to [download](https://github.com/su2code/SU2/wiki/Download) and [install](https://github.com/su2code/SU2/wiki/Installation) SU2 can be found in the official [wiki](https://github.com/su2code/SU2/wiki).
+
+
 Basic Features
 ------
 
