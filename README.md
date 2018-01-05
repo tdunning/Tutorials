@@ -1,9 +1,9 @@
 Basic Features
 ------
 
-* [Inviscid Bump](Inviscid_Bump/Inviscid_Bump)   
+* [Inviscid Bump in a Channel](Inviscid_Bump/Inviscid_Bump)   
 A simulation of internal, inviscid flow through a 2D geometry
-* [Inviscid Wedge](Inviscid_Wedge/Inviscid_Wedge)    
+* [Inviscid Supersonic Wedge](Inviscid_Wedge/Inviscid_Wedge)    
 Get familiar with supersonic flows 
 * [Inviscid OneraM6](Inviscid_OneraM6/Inviscid_OneraM6)   
 Simulation of external, inviscid flow around a 3D geometry
@@ -20,8 +20,8 @@ Simulation of external, viscous flow around a 3D geometry using a turbulence mod
 
 Shape Design
 -----------
-* [Optimal Shape Design](Optimal_Shape_Design/Optimal_Shape_Design)    
+* [Optimal Shape Design of a Transonic Airfoil](Optimal_Shape_Design/Optimal_Shape_Design)    
 Perform an optimal shape design of a 2D geometry
-* [Constrained Optimal Shape Design](Constrained_Optimal_Shape_Design/Constrained_Optimal_Shape_Design)    
+* [Constrained Optimal Shape Design of a Fixed Wing](Constrained_Optimal_Shape_Design/Constrained_Optimal_Shape_Design)    
 Perform an optimal shape design of a 3D geometry
 
