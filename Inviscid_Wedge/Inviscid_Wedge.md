@@ -20,7 +20,7 @@ The resources for this tutorial can be found in the [Inviscid_Wedge](https://git
 
 ## Tutorial
 
-The following tutorial will walk you through the steps required when solving for the supersonic flow past the wedge using SU2. It is assumed you have already obtained and compiled SU2_CFD with CGNS support. If you have yet to complete these requirements, please see the [[Download]] and [[Installation]] pages.
+The following tutorial will walk you through the steps required when solving for the supersonic flow past the wedge using SU2. It is assumed you have already obtained and compiled SU2_CFD with CGNS support. If you have yet to complete these requirements, please see the [Download](https://github.com/su2code/SU2/wiki/Download) and [Installation](https://github.com/su2code/SU2/wiki/Installation) pages.
 
 ### Background
 
