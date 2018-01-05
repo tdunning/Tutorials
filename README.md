@@ -4,6 +4,8 @@ Rather than writing a long manual on all available (and constantly evolving) con
 
 The tutorials are numbered roughly in order of their complexity and how experienced with the code the user may need to be, noting that the more advanced tutorials may assume the user has already worked through the earlier ones. Each tutorial attempts to present new features of SU2 and contains explanations for the key configuration file options. More information on the exact learning goals of a tutorial can be seen at the beginning of each.
 
+You can get all the mesh and config files either by cloning or downloading the Tutorials repository (https://github.com/su2code/Tutorials) or by downloading them separately using the provided links on each tutorial page.
+
 Basic Features
 ------
 
