@@ -15,7 +15,7 @@ We will walk through the shape design process and highlight several options rela
 
 ## Resources
 
-The resources for this tutorial can be found in the Tutorials/Optimal_Shape_Design directory. You will need the configuration file ([inv_NACA0012_basic.cfg](inv_NACA0012_basic.cfg)) and the mesh file ([mesh_NACA0012_inv.su2](mesh_NACA0012_inv.su2)). Restart files for the flow and adjoint problems are also available in this directory, which can be used as an initial state for reducing the cost of the design process.
+The resources for this tutorial can be found in the [Optimal_Shape_Design](https://github.com/su2code/Tutorials/tree/master/Optimal_Shape_Design) directory in the [tutorials repository](https://github.com/su2code/Tutorials/tree/master/). You will need the configuration file ([inv_NACA0012_basic.cfg](inv_NACA0012_basic.cfg)) and the mesh file ([mesh_NACA0012_inv.su2](mesh_NACA0012_inv.su2)). 
 
 ## Tutorial
 
