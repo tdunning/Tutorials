@@ -1,1 +1,55 @@
-theme: jekyll-theme-cayman
+# Site settings
+title: Tutorials Website
+email: su2code.central@gmail.com
+description: >
+  Site for SU2 Tutorials.
+
+baseurl: "/Tutorials" # the subpath of your site, e.g. /blog/
+url: https://su2code.github.io/Tutorials # the base hostname & protocol for your site
+git_address: https://github.com/su2code/Tutorials
+git_edit_address: https://github.com/su2code/Tutorials/blob/gh-pages
+
+# theme options from https://bootswatch.com/
+# comment out this to use default Bootstrap
+bootwatch: spacelab
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+gems:
+  - jekyll-feed
+  - jekyll-redirect-from
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - .idea/
+  - .gitignore
+  - README.md
+timezone: Europe/Berlin
+defaults:
+- scope:
+    path: _posts
+    type: posts
+  values:
+    layout: post
+    sectionid: blog
+
+- scope:
+    path: _docs
+    type: docs
+  values:
+    layout: docs
+    sectionid: docs
+    seo:
+      type: "WebPage"
+
+collections:
+  docs:
+    permalink: /:collection/:path/
+    output: true
+  posts:
+    permalink: /blog/:year/:month/:day/:title/
+    output: true
