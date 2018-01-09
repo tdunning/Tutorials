@@ -91,7 +91,13 @@ To run this test case, follow these steps at a terminal command line:
 
 1.	Copy the config file ([transitional_BC_model_ConfigFile.cfg](../../Transitional_Flat_Plate/transitional_BC_model_ConfigFile.cfg)) and the mesh file ([grid.su2](../../Transitional_Flat_Plate/grid.su2)) so that they are in the same directory. Move to the directory containing the config file and the mesh file. Make sure that the SU2 tools were compiled, installed, and that their install location was added to your path.
 
-2.	Run the executable by entering `SU2_CFD transitional_BC_model_ConfigFile.cfg` at the command line.
+2.	Run the executable by entering 
+
+    ```
+    $ SU2_CFD transitional_BC_model_ConfigFile.cfg
+    ``` 
+
+    at the command line.
 
 3.	SU2 will print residual updates for each iteration of the flow solver, and the simulation will finish upon reaching the specified convergence criteria.
 
