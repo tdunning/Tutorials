@@ -66,13 +66,13 @@ SLOPE_LIMITER_FLOW= VENKATAKRISHNAN
 % Coefficient for the limiter (smooth regions)
 VENKAT_LIMITER_COEFF= 10.0
 ```
-For laminar flow around the cylinder, the 2nd-order Roe upwinding method showed good performance when the Venkatakrishnan limiter was used. Without the limiter, the computation is much less stable and may not converge. Note that, in order to activate the limiter for the upwind methods, SLOPE_LIMITER_FLOW must be set to something else than NONE. Otherwise no limiting will be applied to the convective flux during the higher-order reconstruction. Limiting is not applicable if MUSCL_FLOW=NO, as there is no higher-order reconstruction and thus no need to limit the gradients. The viscous terms are computed with the corrected average of gradients method (by default). As in the flat plate tutorial, it is recommended that users experiment with the VENKAT_LIMITER_COEFF value for their own applications.
+For laminar flow around the cylinder, the 2nd-order Roe upwinding method showed good performance when the Venkatakrishnan limiter was used. Without the limiter, the computation is much less stable and may not converge. Note that, in order to activate the limiter for the upwind methods, `SLOPE_LIMITER_FLOW` must be set to something else than `NONE`. Otherwise no limiting will be applied to the convective flux during the higher-order reconstruction. Limiting is not applicable if `MUSCL_FLOW=NO`, as there is no higher-order reconstruction and thus no need to limit the gradients. The viscous terms are computed with the corrected average of gradients method (by default). As in the flat plate tutorial, it is recommended that users experiment with the `VENKAT_LIMITER_COEFF` value for their own applications.
 
 ### Running SU2
 
 The cylinder simulation for the 13,336 node mesh is small and will execute relatively quickly on a single workstation or laptop in serial. To run this test case, follow these steps at a terminal command line:
  1. Move to the directory containing the configuration file ([lam_cylinder.cfg](lam_cylinder.cfg)) and the mesh file ([mesh_cylinder_lam.su2](mesh_cylinder_lam.su2)). Make sure that the SU2 tools were compiled, installed, and that their install location was added to your path.
- 2. Run the executable by entering "SU2_CFD lam_cylinder.cfg" at the command line.
+ 2. Run the executable by entering `SU2_CFD lam_cylinder.cfg` at the command line.
  3. SU2 will print residual updates with each iteration of the flow solver, and the simulation will terminate after meeting the specified convergence criteria.
  4. Files containing the results will be written upon exiting SU2. The flow solution can be visualized in ParaView (.vtk) or Tecplot (.dat for ASCII).
 
