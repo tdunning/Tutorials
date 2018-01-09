@@ -85,7 +85,7 @@ MARKER_HEATFLUX= ( wall, 0.0 )
 % Format: ( marker name, constant wall temperature (K), ... )
 MARKER_ISOTHERMAL= ( NONE )
 ```
-An adiabatic, no-slip boundary condition can be selected by using the MARKER_HEATFLUX option with the value of the heat flux set to 0.0. An isothermal wall condition is also available with a similar format.
+An adiabatic, no-slip boundary condition can be selected by using the `MARKER_HEATFLUX` option with the value of the heat flux set to 0.0. An isothermal wall condition is also available with a similar format.
 
 Here, we define some of the typical numerical methods chosen for calculating viscous flows with SU2:
 ```
@@ -123,13 +123,13 @@ CAUCHY_EPS= 1E-6
 % SENS_MACH, DELTA_LIFT, DELTA_DRAG)
 CAUCHY_FUNC_FLOW= DRAG 
 ```
-Rather than achieving a certain order of magnitude in the density residual to judge convergence, what we call the Cauchy convergence criteria is chosen for this problem. This type of criteria measures the change in a specific quantity of interest over a specified number of previous iterations. With the options selected above, the flat plate solution will terminate when the change in the drag coefficient (CAUCHY_FUNC_FLOW) for the plate over the previous 100 iterations (CAUCHY_ELEMS) becomes less than 1E-6 (CAUCHY_EPS). A convergence criteria of this nature can be very useful for design problems where the solver is embedded in a larger design loop and reliable convergence behavior is essential.
+Rather than achieving a certain order of magnitude in the density residual to judge convergence, what we call the Cauchy convergence criteria is chosen for this problem. This type of criteria measures the change in a specific quantity of interest over a specified number of previous iterations. With the options selected above, the flat plate solution will terminate when the change in the drag coefficient (`CAUCHY_FUNC_FLOW`) for the plate over the previous 100 iterations (`CAUCHY_ELEMS`) becomes less than 1E-6 (`CAUCHY_EPS`). A convergence criteria of this nature can be very useful for design problems where the solver is embedded in a larger design loop and reliable convergence behavior is essential.
 
 ### Running SU2
 
 The flat plate simulation for the 65x65 node mesh is small and will execute relatively quickly on a single workstation or laptop in serial. To run this test case, follow these steps at a terminal command line:
  1. Move to the directory containing the config file ([lam_flatplate.cfg](https://github.com/su2code/SU2/tree/master/TestCases/navierstokes/flatplate)) and the mesh file ([mesh_flatplate_65x65.su2](https://github.com/su2code/TestCases/tree/master/navierstokes/flatplate)). Make sure that the SU2 tools were compiled, installed, and that their install location was added to your path.
- 2. Run the executable by entering "SU2_CFD lam_flatplate.cfg" at the command line. 
+ 2. Run the executable by entering `SU2_CFD lam_flatplate.cfg` at the command line. 
  3. SU2 will print residual updates with each iteration of the flow solver, and the simulation will terminate after reaching the specified convergence criteria.
  4. Files containing the results will be written upon exiting SU2. The flow solution can be visualized in ParaView (.vtk) or Tecplot (.dat for ASCII).
 
