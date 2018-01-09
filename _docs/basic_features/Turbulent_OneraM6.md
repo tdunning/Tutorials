@@ -117,11 +117,11 @@ MU_T_REF= 273.15
 % Sutherland constant (110.4 default value for AIR SI)
 SUTHERLAND_CONSTANT= 110.4
 ```
-The options above set the conditions for a 3D, viscous flow. The MACH_NUMBER, AOA, and SIDESLIP_ANGLE options remain the same as they appeared for the inviscid ONERA M6 tutorial, which includes a description of the freestream flow direction. For the RANS equations, SU2 is using a calorically perfect gas which is selected by setting the FLUID_MODEL to STANDARD_AIR. The fluid flow properties can be changed by selecting a different fluid model.
+The options above set the conditions for a 3D, viscous flow. The `MACH_NUMBER`, `AOA`, and `SIDESLIP_ANGLE` options remain the same as they appeared for the inviscid ONERA M6 tutorial, which includes a description of the freestream flow direction. For the RANS equations, SU2 is using a calorically perfect gas which is selected by setting the `FLUID_MODEL` to `STANDARD_AIR`. The fluid flow properties can be changed by selecting a different fluid model.
 
-For a viscous simulation, the numerical experiment must match the physical reality. This flow similarity is achieved by matching the REYNOLDS_NUMBER and REYNOLDS_LENGTH to the original system (assuming the Mach number and the geometry already match). Upon starting a viscous simulation in SU2, the following steps are performed to set the flow conditions internally:
+For a viscous simulation, the numerical experiment must match the physical reality. This flow similarity is achieved by matching the `REYNOLDS_NUMBER` and `REYNOLDS_LENGTH` to the original system (assuming the Mach number and the geometry already match). Upon starting a viscous simulation in SU2, the following steps are performed to set the flow conditions internally:
  1. Use the gas constants and freestream temperature to calculate the speed of sound.
- 2. Calculate the freestream velocity vector from the Mach number, AOA/sideslip angle, and speed of sound from step 1.
+ 2. Calculate the freestream velocity vector from the Mach number, `AOA`/`SIDESLIP_ANGLE`, and speed of sound from step 1.
  3. Compute the freestream viscosity by using the viscosity model specified in the config file.
  4. Use the definition of the Reynolds number to find the freestream density from the supplied Reynolds information, freestream velocity, and freestream viscosity from step 3.
  5. Calculate the freestream pressure using the perfect gas law with the freestream temperature, specific gas constant, and freestream density from step 4.
@@ -149,7 +149,7 @@ The wing mesh should easily fit on a single core machine. To run this test case,
 #### In Parallel
 
 If SU2 has been built with parallel support, the recommended method for running a parallel simulation is through the use of the parallel_computation.py Python script. This automatically handles the domain decomposition and execution with SU2_CFD, and the merging of the decomposed files using SU2_SOL. Follow these steps to run the ONERA M6 case in parallel:
- 1. Move to the directory containing the config file (turb_ONERAM6.cfg) and the mesh file (mesh_ONERAM6_turb_hexa_43008.su2). Make sure that the SU2 tools were compiled with parallel support, installed, and that their install location was added to your path.
+ 1. Move to the directory containing the config file ([turb_ONERAM6.cfg](../../Turbulent_OneraM6/turb_ONERAM6.cfg)) and the mesh file ([mesh_ONERAM6_turb_hexa_43008.su2](../../Turbulent_OneraM6/mesh_ONERAM6_turb_hexa_43008.su2)). Make sure that the SU2 tools were compiled with parallel support, installed, and that their install location was added to your path.
  2. Run the python script which will automatically call SU2_CFD and will perform the simulation using NP number of processors by entering in the command line:
 
     ```
