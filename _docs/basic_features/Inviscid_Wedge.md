@@ -146,7 +146,7 @@ The wedge simulation is small and will execute quickly on a single workstation o
  2. Run the executable by entering
  
      ```
-     SU2_CFD inv_wedge_HLLC.cfg
+     $ SU2_CFD inv_wedge_HLLC.cfg
      ```
  
      at the command line.
