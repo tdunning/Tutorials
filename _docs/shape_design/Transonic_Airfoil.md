@@ -70,8 +70,8 @@ CONV_NUM_METHOD_ADJFLOW= JST
 % Slope limiter (VENKATAKRISHNAN, SHARP_EDGES)
 SLOPE_LIMITER_ADJFLOW= VENKATAKRISHNAN
 %
-% 1st, 2nd, and 4th order artificial dissipation coefficients
-AD_COEFF_ADJFLOW= ( 0.15, 0.0, 0.02 )
+% 2nd, and 4th order artificial dissipation coefficients
+ADJ_JST_SENSOR_COEFF= ( 0.0, 0.02 )
 %
 % Time discretization (RUNGE-KUTTA_EXPLICIT, EULER_IMPLICIT)
 TIME_DISCRE_ADJFLOW= EULER_IMPLICIT
@@ -82,9 +82,9 @@ CFL_REDUCTION_ADJFLOW= 0.8
 % Limit value for the adjoint variable
 LIMIT_ADJFLOW= 1E6
 ```
-For this inviscid case, we have selected a modified version of the JST scheme for spatial integration. This 2nd-order, centered scheme affords us control over the level of dissipation applied to the problem. In particular, we control the higher-order dissipation (added everywhere in the solution) by modifying the 3rd entry in the AD_COEFF_ADJFLOW option. 
+For this inviscid case, we have selected a modified version of the JST scheme for spatial integration. This 2nd-order, centered scheme affords us control over the level of dissipation applied to the problem. In particular, we control the higher-order dissipation (added everywhere in the solution) by modifying the 2nd entry in the `ADJ_JST_SENSOR_COEFF` option. 
 
-If you are having trouble converging your adjoint calculation, we often recommend adjusting the level of dissipation, along with reducing the CFL condition with the CFL_REDUCTION_ADJFLOW option, or even imposing a hard limit on the value of the adjoint density variable using the LIMIT_ADJFLOW option. While increasing the dissipation or limiting the adjoint variables can sometimes help to stabilize a solution, **note that overly increasing the dissipation or imposing limits that are too strict can result in decreased accuracy**. One should fully investigate the effect of these parameters, and ideally, a gradient accuracy/verification study should be performed (one can always compare against finite differencing).
+If you are having trouble converging your adjoint calculation, we often recommend adjusting the level of dissipation, along with reducing the CFL condition with the `CFL_REDUCTION_ADJFLOW` option, or even imposing a hard limit on the value of the adjoint density variable using the `LIMIT_ADJFLOW` option. While increasing the dissipation or limiting the adjoint variables can sometimes help to stabilize a solution, **note that overly increasing the dissipation or imposing limits that are too strict can result in decreased accuracy**. One should fully investigate the effect of these parameters, and ideally, a gradient accuracy/verification study should be performed (one can always compare against finite differencing).
 
 Now, we present the options that specify the optimal shape design problem:
 ```
@@ -115,9 +115,9 @@ DEFINITION_DV= ( 1, 1.0 | airfoil | 0, 0.05 ); ( 1, 1.0 | airfoil | 0, 0.10 ); (
 ```
 Here, we define the objective function for the optimization as drag without any constraints. The scale value of 0.001 is chosen to aid the optimizer in taking a physically appropriate first step (i.e., not too large that the subsequent calculations go unstable due to a large, non-physical deformation). We could impose a constraint on the maximum thickness, for instance, or add a lift constraint. Constraints will be discussed in the next tutorial on 3D design.
 
-The SLSQP optimizer from the SciPy package for Python is the default optimizer called by the shape_optimization.py script. In addition to the hooks to the objective and gradient functions, this optimizer accepts options for the maximum number of optimizer iterations (OPT_ITERATIONS), requested accuracy (OPT_ACCURACY), and design variable bounds (OPT_BOUND_UPPER, OPT_BOUND_LOWER). During the optimization process, the SLSQP optimizer will call the flow and adjoint problems as necessary to take the next step in the design space. However, note that the optimizer will often make multiple function calls per major optimizer iteration in order to compute the next step size.
+The SLSQP optimizer from the SciPy package for Python is the default optimizer called by the shape_optimization.py script. In addition to the hooks to the objective and gradient functions, this optimizer accepts options for the maximum number of optimizer iterations (`OPT_ITERATIONS`), requested accuracy (`OPT_ACCURACY`), and design variable bounds (`OPT_BOUND_UPPER`, `OPT_BOUND_LOWER`). During the optimization process, the SLSQP optimizer will call the flow and adjoint problems as necessary to take the next step in the design space. However, note that the optimizer will often make multiple function calls per major optimizer iteration in order to compute the next step size.
 
-The DEFINITION_DV is the list of design variables. For the airfoil problem, we want to minimize the drag by changing the surface profile shape. To do so, we define a set of Hicks-Henne bump functions. Each design variable is separated by a semicolon, although **note that there is no final semicolon at the end of the list**. 
+The `DEFINITION_DV` is the list of design variables. For the airfoil problem, we want to minimize the drag by changing the surface profile shape. To do so, we define a set of Hicks-Henne bump functions. Each design variable is separated by a semicolon, although **note that there is no final semicolon at the end of the list**. 
 
 The first value in the parentheses is the variable type, which is 1 for a Hicks-Henne bump function. The second value is the scale of the variable (typically left as 1.0). The name between the vertical bars is the marker tag where the variable deformations will be applied. Only the airfoil surface will be deformed in this problem. The final two values in the parentheses specify whether the bump function is applied to the upper (1) or lower (0) side and the x-location of the bump between 0 and 1 (we assume a chord of 1.0 for the Hicks-Henne bumps), respectively. 
 
@@ -134,9 +134,9 @@ The continuous adjoint methodology for obtaining surface sensitivities is implem
 Figure (4): Adjoint density contours on the baseline NACA 0012 airfoil.
 
 To run this design case, follow these steps at a terminal command line:
-1. Move to the directory containing the config file (inv_NACA0012_basic.cfg) and the mesh file (mesh_NACA0012_inv.su2). Assuming that SU2 tools were compiled, installed, and that their install location was added to your path, the shape_optimization.py script, SU2_CFD, SU2_DOT, and SU2_DEF should all be available.
+1. Move to the directory containing the config file ([inv_NACA0012_basic.cfg](../../Optimal_Shape_Design/inv_NACA0012_basic.cfg) and the mesh file ([mesh_NACA0012_inv.su2](../../Optimal_Shape_Design/mesh_NACA0012_inv.su2)). Assuming that SU2 tools were compiled, installed, and that their install location was added to your path, the shape_optimization.py script, SU2_CFD, SU2_DOT, and SU2_DEF should all be available.
 
-2. Execute the shape optimization script by entering `$ python shape_optimization.py -f inv_NACA0012_basic.cfg' at the command line. Again, note that Python, NumPy, and SciPy are all required to run the script.
+2. Execute the shape optimization script by entering `python shape_optimization.py -f inv_NACA0012_basic.cfg` at the command line. Again, note that Python, NumPy, and SciPy are all required to run the script.
 
 3. The python script will drive the optimization process by executing flow solutions, adjoint solutions, gradient projection, and mesh deformation in order to drive the design toward an optimum. The optimization process will cease when certain tolerances set within the SciPy optimizer are met.
 
