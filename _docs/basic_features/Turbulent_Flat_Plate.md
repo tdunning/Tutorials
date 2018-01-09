@@ -55,13 +55,13 @@ PHYSICAL_PROBLEM= NAVIER_STOKES
 % If Navier-Stokes, kind of turbulent model (NONE, SA, SST)
 KIND_TURB_MODEL= SA
 ```
-The governing equations are Navier-Stokes, but by entering "SA" as the option for "KIND_TURB_MODEL," we activate the RANS governing equations with the Spalart-Allmaras (SA) turbulence model. The SA model is composed of one-equation for a turbulence field variable that is directly related to the turbulent eddy viscosity. It is a popular choice for external aerodynamic flows, such as those around airfoils and wings. In previous tutorials, "NONE" has been chosen, resulting in the use of the laminar Navier-Stokes governing equations. The Shear Stress Transport model (SST) of Menter is also available in SU2.
+The governing equations are Navier-Stokes, but by entering `SA` as the option for `KIND_TURB_MODEL` we activate the RANS governing equations with the Spalart-Allmaras (SA) turbulence model. The SA model is composed of one-equation for a turbulence field variable that is directly related to the turbulent eddy viscosity. It is a popular choice for external aerodynamic flows, such as those around airfoils and wings. In previous tutorials, `NONE` has been chosen, resulting in the use of the laminar Navier-Stokes governing equations. The Shear Stress Transport model (SST) of Menter is also available in SU2.
 
 ### Running SU2
 
 To run this test case, follow these steps at a terminal command line:
  1. Copy the config file ([turb_SA_flatplate.cfg](../../Turbulent_Flat_Plate/turb_SA_flatplate.cfg)) and/or the mesh file ([mesh_flatplate_turb_137x97.su2](../../Turbulent_Flat_Plate/mesh_flatplate_turb_137x97.su2)) so that they are in the same directory. Move to the directory containing the config file and the mesh file. Make sure that the SU2 tools were compiled, installed, and that their install location was added to your path.
- 2. Run the executable by entering "SU2_CFD turb_SA_flatplate.cfg" at the command line.
+ 2. Run the executable by entering `SU2_CFD turb_SA_flatplate.cfg` at the command line.
  3. SU2 will print residual updates with each iteration of the flow solver, and the simulation will finish upon reaching the specified convergence criteria.
  4. Files containing the results will be written upon exiting SU2. The flow solution can be visualized in ParaView (.vtk) or Tecplot (.dat for ASCII).
 
