@@ -129,7 +129,13 @@ Rather than achieving a certain order of magnitude in the density residual to ju
 
 The flat plate simulation for the 65x65 node mesh is small and will execute relatively quickly on a single workstation or laptop in serial. To run this test case, follow these steps at a terminal command line:
  1. Move to the directory containing the config file ([lam_flatplate.cfg](https://github.com/su2code/SU2/tree/master/TestCases/navierstokes/flatplate)) and the mesh file ([mesh_flatplate_65x65.su2](https://github.com/su2code/TestCases/tree/master/navierstokes/flatplate)). Make sure that the SU2 tools were compiled, installed, and that their install location was added to your path.
- 2. Run the executable by entering `SU2_CFD lam_flatplate.cfg` at the command line. 
+ 2. Run the executable by entering 
+ 
+    ```
+    SU2_CFD lam_flatplate.cfg
+    ```
+ 
+    at the command line. 
  3. SU2 will print residual updates with each iteration of the flow solver, and the simulation will terminate after reaching the specified convergence criteria.
  4. Files containing the results will be written upon exiting SU2. The flow solution can be visualized in ParaView (.vtk) or Tecplot (.dat for ASCII).
 
