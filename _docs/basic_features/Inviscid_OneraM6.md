@@ -40,7 +40,7 @@ These transonic flow conditions will cause the typical "lambda" shock along the 
 
 ### Mesh Description
 
-The computational domain is a large parallelepiped with the wing half-span on one boundary in the x-z plane. The mesh provided in the tutorial resources directory listed above is a relatively coarse mesh provided that will complete in less time, but provide less accurate results. Users interested in obtaining more accurate results should use the finer mesh (mesh_ONERAM6_inv_FFD.su2) and associated config file (inv_oneram6_adv.cfg) provided in Tutorials/Constrained_Optimal_Shape_Design. The results shown in this tutorial use the finer mesh. 
+The computational domain is a large parallelepiped with the wing half-span on one boundary in the x-z plane. The mesh provided in the tutorial resources directory listed above is a relatively coarse mesh provided that will complete in less time, but provide less accurate results. Users interested in obtaining more accurate results should use the finer mesh ([mesh_ONERAM6_inv_FFD.su2](../../Constrained_Optimal_Shape_Design/mesh_ONERAM6_inv_FFD.su2)) and associated config file ([inv_oneram6_adv.cfg](../../Constrained_Optimal_Shape_Design/inv_oneram6_adv.cfg) provided in [Tutorials/Constrained_Optimal_Shape_Design](https://github.com/su2code/Tutorials/tree/master/Constrained_Optimal_Shape_Design). The results shown in this tutorial use the finer mesh. 
 
 The finer mesh consists of 582,752 tetrahedral elements and 108,396 nodes. Three boundary conditions are employed: Euler wall on the wing surface, a far-field characteristic-based condition on the far-field markers, and a symmetry boundary condition for the marker where the wing half-span is attached. The symmetry condition acts to mirror the flow about the x-z plane, reducing the complexity of the mesh and the computational cost. Images of the entire domain and the triangular elements on the wing surface are shown below.
 
@@ -74,7 +74,7 @@ FREESTREAM_TEMPERATURE= 288.15
 
 For an inviscid problem such as this, the flow conditions are completely defined by an input Mach number, flow direction, freestream pressure, and freestream temperature. The input Mach number is transonic at 0.8395. The freestream temperature and pressure have been set to standard sea level values for air at 101325.0 N/m2 and 288.15 K, respectively. The flow field will be initialized to these freestream values everywhere in the domain.
 
-Lastly, it is very important to note the definition of the freestream flow direction in 3D. The default freestream direction (AOA = 0.0 degrees and SIDESLIP_ANGLE = 0.0 degrees) is along the positive x-axis without any components in the y- or z-directions. Referring to Figure (1), we see that AOA = 3.06 degrees will result in a non-zero freestream velocity in the positive z-direction. While zero for this problem, setting the SIDESLIP_ANGLE to a non-zero value would result in a non-zero velocity component in the y-direction. In 2D, the flow is in the x-y plane. While the default freestream direction is still along the positive x-axis, a non-zero AOA value for 2D problems will result in a non-zero freestream velocity in the y-direction. The SIDESLIP_ANGLE variable is unused in 2D.
+Lastly, it is very important to note the definition of the freestream flow direction in 3D. The default freestream direction (`AOA = 0.0` degrees and `SIDESLIP_ANGLE = 0.0` degrees) is along the positive x-axis without any components in the y- or z-directions. Referring to Figure (1), we see that `AOA = 3.06` degrees will result in a non-zero freestream velocity in the positive z-direction. While zero for this problem, setting the `SIDESLIP_ANGLE` to a non-zero value would result in a non-zero velocity component in the y-direction. In 2D, the flow is in the x-y plane. While the default freestream direction is still along the positive x-axis, a non-zero AOA value for 2D problems will result in a non-zero freestream velocity in the y-direction. The `SIDESLIP_ANGLE` variable is unused in 2D.
 
 In order to define reference values (for non-dimen. purposes):
 ```
@@ -96,7 +96,7 @@ REF_AREA= 0
 REF_DIMENSIONALIZATION= FREESTREAM_VEL_EQ_ONE
 ```
 
-SU2 accepts arbitrary reference values for computing the force coefficients. A reference area can be supplied by the user for the calculation of force coefficients (e.g. a trapezoidal wing area) with the REF_AREA variable. If REF_AREA is set equal to zero, as for the ONERA M6, a reference area will be automatically calculated by summing all surface normal components in the positive z-direction on the monitored markers. For this ONERA M6 case SU2 performs a non-dimensional simulation (REF_DIMENSIONALIZATION= FREESTREAM_VEL_EQ_ONE). If you wish to perform a dimensional simulation you can pick the DIMENSIONAL option. For non-dimesionalization case FREESTREAM_PRESS_EQ_ONE the free-stream values at the farfield will be (pressure=1.0, density=1.0, temperature=1.0). For FREESTREAM_VEL_EQ_MACH the free-stream values at the farfield will be (velocity=MACH, density=1.0, temperature=1.0) and for FREESTREAM_VEL_EQ_ONE the free-stream values at the farfield will be (velocity=1.0, density=1.0, temperature=1.0).
+SU2 accepts arbitrary reference values for computing the force coefficients. A reference area can be supplied by the user for the calculation of force coefficients (e.g. a trapezoidal wing area) with the `REF_AREA` variable. If `REF_AREA` is set equal to zero, as for the ONERA M6, a reference area will be automatically calculated by summing all surface normal components in the positive z-direction on the monitored markers. For this ONERA M6 case SU2 performs a non-dimensional simulation (`REF_DIMENSIONALIZATION= FREESTREAM_VEL_EQ_ONE`). If you wish to perform a dimensional simulation you can pick the `DIMENSIONAL` option. For non-dimensionalization case `FREESTREAM_PRESS_EQ_ONE` the free-stream values at the farfield will be (pressure=1.0, density=1.0, temperature=1.0). For `FREESTREAM_VEL_EQ_MACH` the free-stream values at the farfield will be (velocity=MACH, density=1.0, temperature=1.0) and for `FREESTREAM_VEL_EQ_ONE` the free-stream values at the farfield will be (velocity=1.0, density=1.0, temperature=1.0).
 
 Finally, we discuss some key multigrid options:
 ```
@@ -119,17 +119,17 @@ Instructions for running this test case are given here for both serial and paral
 
 The wing simulation is relatively large, but should still fit on a single-core machine. To run this test case, follow these steps at a terminal command line:
  1. Move to the directory containing the config file (inv_ONERAM6.cfg) and the mesh file (mesh_ONERAM6_inv_ffd.su2). Make sure that the SU2 tools were compiled, installed, and that their install location was added to your path.
- 2. Run the executable by entering "SU2_CFD inv_ONERAM6.cfg" at the command line.
+ 2. Run the executable by entering `SU2_CFD inv_ONERAM6.cfg` at the command line.
  3. SU2 will print residual updates with each iteration of the flow solver, and the simulation will terminate after reaching the specified convergence criteria.
  4. Files containing the results will be written upon exiting SU2. The flow solution can be visualized in ParaView (.vtk) or Tecplot (.dat for ASCII).
 
 #### In Parallel
 
 If SU2 has been built with parallel support, the recommended method for running a parallel simulation is through the use of the parallel_computation.py python script. This automatically handles the execution of SU2_CFD, and the writing of the solution files using SU2_SOL. Follow these steps to run the ONERA M6 case in parallel:
- 1. Move to the directory containing the config file (inv_ONERAM6.cfg) and the mesh file (mesh_ONERAM6_inv_ffd.su2). Make sure that the SU2 tools were compiled, installed, and that their install location was added to your path.
+ 1. Move to the directory containing the config file ([inv_ONERAM6.cfg](../../Inviscid_OneraM6/inv_ONERAM6.cfg)) and the mesh file ([mesh_ONERAM6_inv_ffd.su2](../../Inviscid_OneraM6/mesh_ONERAM6_inv_ffd.su2)). Make sure that the SU2 tools were compiled, installed, and that their install location was added to your path.
  2. Run the python script by entering "parallel_computation.py -f inv_ONERAM6.cfg -n NP" at the command line with NP being the number of processors to be used for the simulation.
  3. SU2 will print residual updates with each iteration of the flow solver, and the simulation will terminate after reaching the specified convergence criteria.
- 4. The python script will automatically call the SU2_SOL executable for merging the decomposed solution files from each processor into a single file. The files containing the results will be written upon exiting SU2. The flow solution can then be visualized in ParaView (.vtk) or Tecplot (.dat for ASCII).
+ 4. The python script will automatically call the `SU2_SOL` executable for merging the decomposed solution files from each processor into a single file. The files containing the results will be written upon exiting SU2. The flow solution can then be visualized in ParaView (.vtk) or Tecplot (.dat for ASCII).
 
 ### Results
 
