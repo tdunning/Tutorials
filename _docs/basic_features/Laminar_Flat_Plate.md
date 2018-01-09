@@ -132,7 +132,7 @@ The flat plate simulation for the 65x65 node mesh is small and will execute rela
  2. Run the executable by entering 
  
     ```
-    SU2_CFD lam_flatplate.cfg
+    $ SU2_CFD lam_flatplate.cfg
     ```
  
     at the command line. 
