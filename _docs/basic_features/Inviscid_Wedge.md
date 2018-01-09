@@ -143,7 +143,13 @@ You will now have a new mesh in the current working directory named "mesh_out.su
 
 The wedge simulation is small and will execute quickly on a single workstation or laptop, and this case will be run in serial. To run this test case, follow these steps at a terminal command line:
  1. Move to the directory containing the config file ([inv_wedge_HLLC.cfg](../../Inviscid_Wedge/inv_wedge_HLLC.cfg)) and the mesh file ([mesh_wedge_inv.cgns](../../Inviscid_Wedge/mesh_wedge_inv.cgns)). Make sure that the SU2 tools were compiled with CGNS support, installed, and that their install location was added to your path.
- 2. Run the executable by entering `SU2_CFD inv_wedge_HLLC.cfg` at the command line.
+ 2. Run the executable by entering
+ 
+     ```
+     SU2_CFD inv_wedge_HLLC.cfg
+     ```
+ 
+     at the command line.
  3. SU2 will print residual updates with each iteration of the flow solver, and the simulation will finish after reaching the specified convergence criteria.
  4. Files containing the results will be written upon exiting SU2. The flow solution can be visualized in ParaView (.vtk) or Tecplot (.dat). The output format is specified in the config file.
 
