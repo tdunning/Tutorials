@@ -118,8 +118,13 @@ Instructions for running this test case are given here for both serial and paral
 #### In Serial
 
 The wing simulation is relatively large, but should still fit on a single-core machine. To run this test case, follow these steps at a terminal command line:
- 1. Move to the directory containing the config file (inv_ONERAM6.cfg) and the mesh file (mesh_ONERAM6_inv_ffd.su2). Make sure that the SU2 tools were compiled, installed, and that their install location was added to your path.
- 2. Run the executable by entering `SU2_CFD inv_ONERAM6.cfg` at the command line.
+ 1. Move to the directory containing the config file ([inv_ONERAM6.cfg](../../Inviscid_OneraM6/inv_ONERAM6.cfg)) and the mesh file ([mesh_ONERAM6_inv_ffd.su2](../../Inviscid_OneraM6/mesh_ONERAM6_inv_ffd.su2)). Make sure that the SU2 tools were compiled, installed, and that their install location was added to your path.
+ 2. Run the executable by entering 
+ 
+     ```
+     $ SU2_CFD inv_ONERAM6.cfg
+     ``` 
+     at the command line.
  3. SU2 will print residual updates with each iteration of the flow solver, and the simulation will terminate after reaching the specified convergence criteria.
  4. Files containing the results will be written upon exiting SU2. The flow solution can be visualized in ParaView (.vtk) or Tecplot (.dat for ASCII).
 
@@ -127,7 +132,13 @@ The wing simulation is relatively large, but should still fit on a single-core m
 
 If SU2 has been built with parallel support, the recommended method for running a parallel simulation is through the use of the parallel_computation.py python script. This automatically handles the execution of SU2_CFD, and the writing of the solution files using SU2_SOL. Follow these steps to run the ONERA M6 case in parallel:
  1. Move to the directory containing the config file ([inv_ONERAM6.cfg](../../Inviscid_OneraM6/inv_ONERAM6.cfg)) and the mesh file ([mesh_ONERAM6_inv_ffd.su2](../../Inviscid_OneraM6/mesh_ONERAM6_inv_ffd.su2)). Make sure that the SU2 tools were compiled, installed, and that their install location was added to your path.
- 2. Run the python script by entering "parallel_computation.py -f inv_ONERAM6.cfg -n NP" at the command line with NP being the number of processors to be used for the simulation.
+ 2. Run the python script by entering 
+ 
+    ```
+    $ parallel_computation.py -f inv_ONERAM6.cfg -n NP
+    ```
+     
+    at the command line with `NP` being the number of processors to be used for the simulation.
  3. SU2 will print residual updates with each iteration of the flow solver, and the simulation will terminate after reaching the specified convergence criteria.
  4. The python script will automatically call the `SU2_SOL` executable for merging the decomposed solution files from each processor into a single file. The files containing the results will be written upon exiting SU2. The flow solution can then be visualized in ParaView (.vtk) or Tecplot (.dat for ASCII).
 
