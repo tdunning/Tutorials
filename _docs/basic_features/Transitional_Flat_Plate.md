@@ -67,7 +67,7 @@ REGIME_TYPE= INCOMPRESSIBLE
 
 ```
 
-The governing equations are RANS with Spalart-Allmaras (SA) turbulence model. By entering “BC” as the option for “KIND_TRANS_MODEL”, Bas-Cakmakcioglu Algebraic Transition Model is activated. This model requires freestream turbulence intensity that is to be used in the transition correlation, thus “FREESTREAM_TURBULENCEINTENSITY” option is also used. The SA model is composed of one-equation for a turbulence field variable that is directly related to the turbulent eddy viscosity. The BC model achieves its purpose by modifying the production term of the SA model. The production term of the SA model is damped until a considerable amount of turbulent viscosity is generated, and after that point the damping effect of the transition model is disabled, thus a transition from laminar to turbulent flow is obtained.
+The governing equations are RANS with Spalart-Allmaras (SA) turbulence model. By entering `BC` as the option for `KIND_TRANS_MODEL`, Bas-Cakmakcioglu Algebraic Transition Model is activated. This model requires freestream turbulence intensity that is to be used in the transition correlation, thus `FREESTREAM_TURBULENCEINTENSITY` option is also used. The SA model is composed of one-equation for a turbulence field variable that is directly related to the turbulent eddy viscosity. The BC model achieves its purpose by modifying the production term of the SA model. The production term of the SA model is damped until a considerable amount of turbulent viscosity is generated, and after that point the damping effect of the transition model is disabled, thus a transition from laminar to turbulent flow is obtained.
 
 The incompressible freestream properties are specified as follows. (Please see "Notes" for freestream properties of other transitional flat plate test cases)
 
@@ -89,9 +89,9 @@ As it can be calculated, the Reynolds number for Schubauer&Klebanoff test case i
 
 To run this test case, follow these steps at a terminal command line:
 
-1.	Copy the config file (transitional_BC_model_ConfigFile.cfg) and the mesh file (grid.su2) so that they are in the same directory. Move to the directory containing the config file and the mesh file. Make sure that the SU2 tools were compiled, installed, and that their install location was added to your path.
+1.	Copy the config file ([transitional_BC_model_ConfigFile.cfg](../../Transitional_Flat_Plate/transitional_BC_model_ConfigFile.cfg)) and the mesh file ([grid.su2](../../Transitional_Flat_Plate/grid.su2)) so that they are in the same directory. Move to the directory containing the config file and the mesh file. Make sure that the SU2 tools were compiled, installed, and that their install location was added to your path.
 
-2.	Run the executable by entering “SU2_CFD transitional_BC_model_ConfigFile.cfg” at the command line.
+2.	Run the executable by entering `SU2_CFD transitional_BC_model_ConfigFile.cfg` at the command line.
 
 3.	SU2 will print residual updates for each iteration of the flow solver, and the simulation will finish upon reaching the specified convergence criteria.
 
