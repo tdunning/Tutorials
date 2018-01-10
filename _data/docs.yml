@@ -8,8 +8,8 @@
   - Inviscid_Bump
   - Inviscid_Wedge
   - Inviscid_OneraM6
-  - Laminar_Cylinder
   - Laminar_Flat_Plate
+  - Laminar_Cylinder
   - Turbulent_Flat_Plate
   - Transitional_Flat_Plate
   - Turbulent_OneraM6
