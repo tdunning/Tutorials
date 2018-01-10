@@ -7,16 +7,17 @@ permalink: /docs/Laminar_Flat_Plate/
 
 ## Goals
 
-Upon completing this tutorial, the user will be familiar with performing a simulation of external, laminar flow over a flat plate. The solution will provide a laminar boundary layer on the surface, which can be compared to the Blasius solution as a validation case for SU2. Consequently, the following capabilities of SU2 will be showcased in this tutorial:
+Upon completing this tutorial, the user will be familiar with performing a simulation of external, laminar flow over a flat plate. The solution will provide a laminar boundary layer on the surface, which can be compared to the Blasius solution as a verification case for SU2. Consequently, the following capabilities of SU2 will be showcased in this tutorial:
 
 - Steady, 2D, Laminar Navier-Stokes equations 
 - Multigrid
-- Roe (Second-Order) numerical scheme in space
+- Roe convective scheme in space (2nd-order, upwind)
+- Corrected average-of-gradients viscous scheme
 - Euler implicit time integration
 - Inlet, Outlet, Symmetry, and Navier-Stokes Wall boundary conditions
 - Cauchy convergence criteria
 
-The intent of this tutorial is to introduce a common viscous test case which is used to explain how different equation sets can be chosen in SU2. We also introduce some details on the numerics and a new type of convergence criteria which monitors the change of a specific objective, such as lift or drag, in order to assess convergence.
+The intent of this tutorial is to introduce a common viscous test case which is used to explain the basics of setting up a viscous case in SU2.
 
 ## Resources
 
@@ -25,7 +26,7 @@ The resources for this tutorial can be found in the [Laminar_Flat_Plate](https:/
 
 ## Tutorial
 
-The following tutorial will walk you through the steps required when solving for the flow over a flat plate using SU2. It is assumed you have already obtained and compiled the SU2_CFD code for a serial computation. If you have yet to complete these requirements, please see the Download and Installation pages.
+The following tutorial will walk you through the steps required when solving for the flow over a flat plate using SU2. It is assumed you have already obtained and compiled the SU2_CFD code for a serial computation. If you have yet to complete these requirements, please see the [Download](https://github.com/su2code/SU2/wiki/Download) and [Installation](https://github.com/su2code/SU2/wiki/Installation) pages.
 
 ### Background
 
@@ -37,7 +38,7 @@ The third-order, ordinary differential equation can be solved numerically using 
 
 ![Blasius Cf](../../Laminar_Flat_Plate/images/blasius_cf.png)
 
-where Re_x is the Reynolds number along the plate. In this tutorial, we will perform a solution of nearly incompressible (low Mach number) laminar flow over a flat plate and compare our results against the analytical Blasius solutions for the profile shape and skin friction coefficient along the plate. This problem has become a classic validation case for viscous flow solvers. More detail on the Blasius solution and the similarity variables can be found in Chapter 18 of Fundamentals of Aerodynamics (Fourth Edition) by John D. Anderson, Jr. and most other texts on aerodynamics.
+where Re_x is the Reynolds number along the plate. In this tutorial, we will perform a solution of nearly incompressible (low Mach number) laminar flow over a flat plate and compare our results against the analytical Blasius solutions for the profile shape and skin friction coefficient along the plate. This problem has become a classic test case for viscous flow solvers. More detail on the Blasius solution and the similarity variables can be found in Chapter 18 of Fundamentals of Aerodynamics (Fourth Edition) by John D. Anderson, Jr. and most other texts on aerodynamics.
 
 ### Problem Setup
 
@@ -51,29 +52,35 @@ This problem will solve the for the flow over the flat plate with these conditio
 
 ### Mesh Description
 
-The computational mesh for the flat plate is structured (quadrilaterals) with 65 nodes in both the x- and y-directions. The flat plate is along the lower boundary of the domain (y = 0) starting at x = 0 m and is of length 0.3048 m (1 ft). In the figure of the mesh, this corresponds to the Navier-Stokes (no-slip) boundary condition highlighted in green. The domain extends a distance upstream of the flat plate, and a symmetry boundary condition is used to simulate a free-stream approaching the plate in this region (highlighted in purple). Axial stretching of the mesh is used to aid in resolving the region near the start of the plate where the no-slip boundary condition begins at x = 0 m, as shown in Figure (1).
+The computational mesh for the flat plate is composed of quadrilaterals with 65 nodes in both the x- and y-directions. The flat plate is along the lower boundary of the domain (y = 0) starting at x = 0 m and is of length 0.3048 m (1 ft). In the figure of the mesh, this corresponds to the Navier-Stokes (no-slip) boundary condition highlighted in green. The domain extends a distance upstream of the flat plate, and a symmetry boundary condition is used to simulate a free-stream approaching the plate in this region (highlighted in purple). Axial stretching of the mesh is used to aid in resolving the region near the start of the plate where the no-slip boundary condition begins at x = 0 m, as shown in Figure (1).
 
 ![Lam Plate Mesh](../../Laminar_Flat_Plate/images/lam_plate_mesh_bcs.png)
 Figure (1): Figure of the computational mesh with boundary conditions.
 
-Because the flow is subsonic and disturbances caused by the presence of the plate can propagate both upstream and downstream, the characteristic-based, subsonic inlet and outlet boundary conditions are used for the flow entrance plane (red) and the outflow regions along the upper region of the domain and the exit plane at x = 0.3048 m (blue). In any simulation of viscous flow, it is important to capture the behavior of the boundary layer. Doing so requires an appropriate level of grid refinement near the wall. In this mesh, the vertical spacing is such that approximately 30 grid nodes lie within the boundary layer, which is typical for laminar flows of this nature.
+Because the flow is subsonic and disturbances caused by the presence of the plate can propagate both upstream and downstream, the characteristic-based, subsonic inlet and outlet boundary conditions are used for the flow entrance plane (red) and the outflow regions along the upper region of the domain and the exit plane at x = 0.3048 m (blue). 
+
+In any simulation of viscous flow, it is important to capture the behavior of the boundary layer. Doing so requires an appropriate level of grid refinement near the wall. In this mesh, the vertical spacing is such that approximately 30 grid nodes lie within the boundary layer, which is typical for laminar flows of this nature.
 
 ### Configuration File Options
 
-Several of the key configuration file options for this simulation are highlighted here. Here, we set the problem definition for a viscous flow:
+Several of the key configuration file options for this simulation are highlighted here. As this is our first viscous problem in the tutorials, we set the problem definition for a viscous flow:
+
 ```
+% ------------- DIRECT, ADJOINT, AND LINEARIZED PROBLEM DEFINITION ------------%
+%
 % Physical governing equations (EULER, NAVIER_STOKES,
-%                               TNE2_EULER, TNE2_NAVIER_STOKES,
-%                               WAVE_EQUATION, HEAT_EQUATION, LINEAR_ELASTICITY,
+%                               WAVE_EQUATION, HEAT_EQUATION, FEM_ELASTICITY,
 %                               POISSON_EQUATION)
 PHYSICAL_PROBLEM= NAVIER_STOKES
 %
-% Specify turbulence model (NONE, SA, SST)
+% Specify turbulence model (NONE, SA, SA_NEG, SST)
 KIND_TURB_MODEL= NONE
 ```
-To compute viscous flows, the Navier-Stokes governing equations are selected. In conjunction with selecting Navier-Stokes as the problem type, the type of turbulence model must also be specified. Laminar flows can be computed by entering "NONE" as the option for the type of turbulence model. For turbulent flows, SU2 also has the Spalart-Allmaras model (SA) and the Shear Stress Transport (SST) model of Menter available for use. If this were an inviscid flow problem, the user would enter "EULER" for the problem type. SU2 supports other governing equations, as well, and the user is invited to review the configuration page for a description of the possible options.
 
-Defining a no-slip boundary condition can be accomplished in one of two ways:
+To compute viscous flows, the Navier-Stokes governing equations are selected. In conjunction with selecting Navier-Stokes as the problem type, the type of turbulence model must also be specified. Laminar flows can be computed by entering `KIND_TURB_MODEL= NONE`. For turbulent flows, SU2 currently contains implementations of the Spalart-Allmaras model (`SA`, `SA_NEG`) and the Shear Stress Transport (`SST`) model of Menter. If this were an inviscid flow problem, the user would enter `PHYSICAL_PROBLEM = EULER` for the problem type. SU2 supports other governing equations, as well, and the user is invited to review the configuration page for a description of the possible options.
+
+Defining a no-slip boundary condition for viscous walls can be accomplished in one of two ways:
+
 ```
 % -------------------- BOUNDARY CONDITION DEFINITION --------------------------%
 %
@@ -85,45 +92,17 @@ MARKER_HEATFLUX= ( wall, 0.0 )
 % Format: ( marker name, constant wall temperature (K), ... )
 MARKER_ISOTHERMAL= ( NONE )
 ```
+
 An adiabatic, no-slip boundary condition can be selected by using the `MARKER_HEATFLUX` option with the value of the heat flux set to 0.0. An isothermal wall condition is also available with a similar format.
 
-Here, we define some of the typical numerical methods chosen for calculating viscous flows with SU2:
+The convective fluxes are computed with a 2nd-order upwind method, and the viscous terms are computed with the corrected average-of-gradients method (the default in SU2). We will discuss the various options for specifying the convective scheme in the next tutorial. The flow variable gradients needed for the convective and viscous fluxes are calculated via a weighted least squares method, but a Green-Gauss method is also available: 
+
 ```
-%
 % Numerical method for spatial gradients (GREEN_GAUSS, WEIGHTED_LEAST_SQUARES)
 NUM_METHOD_GRAD= WEIGHTED_LEAST_SQUARES
 ```
-For this problem, we are choosing a typical set of numerical methods. However, it is advised that users should experiment with various numerical methods for their own problems. The gradients are calculated via weighted least squares. 
-```
-%
-% Convective numerical method (JST, LAX-FRIEDRICH, CUSP, ROE, AUSM, HLLC,
-%                              TURKEL_PREC, MSW)
-CONV_NUM_METHOD_FLOW= ROE
-%
-% Monotonic Upwind Scheme for Conservation Laws (TVD) in the flow equations.
-%           Required for 2nd order upwind schemes (NO, YES)
-MUSCL_FLOW= YES
 
-```
-The 2nd-order Roe upwind method is used for computing convective fluxes, and the viscous terms are computed with the corrected average of gradients method (by default).
-
-SU2 features multiple ways to assess convergence:
-```
-%
-% Convergence criteria (CAUCHY, RESIDUAL)
-CONV_CRITERIA= CAUCHY
-%
-% Number of elements to apply the criteria
-CAUCHY_ELEMS= 100
-%
-% Epsilon to control the series convergence
-CAUCHY_EPS= 1E-6
-%
-% Function to apply the criteria (LIFT, DRAG, NEARFIELD_PRESS, SENS_GEOMETRY,
-% SENS_MACH, DELTA_LIFT, DELTA_DRAG)
-CAUCHY_FUNC_FLOW= DRAG 
-```
-Rather than achieving a certain order of magnitude in the density residual to judge convergence, what we call the Cauchy convergence criteria is chosen for this problem. This type of criteria measures the change in a specific quantity of interest over a specified number of previous iterations. With the options selected above, the flat plate solution will terminate when the change in the drag coefficient (`CAUCHY_FUNC_FLOW`) for the plate over the previous 100 iterations (`CAUCHY_ELEMS`) becomes less than 1E-6 (`CAUCHY_EPS`). A convergence criteria of this nature can be very useful for design problems where the solver is embedded in a larger design loop and reliable convergence behavior is essential.
+For this problem, we are choosing a typical set of numerical methods. However, it is advised that users should experiment with various numerical methods for their own problems. 
 
 ### Running SU2
 

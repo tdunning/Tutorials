@@ -25,10 +25,10 @@ A simulation of internal, inviscid flow through a 2D geometry.
 Get familiar with supersonic flows.
 * [Inviscid OneraM6](/Tutorials/docs/Inviscid_OneraM6/)   
 Simulation of external, inviscid flow around a 3D geometry.
-* [Laminar Cylinder](/Tutorials/docs/Laminar_Cylinder/)    
-Simulation of external, laminar flow around a 2D cylinder.
 * [Laminar Flat Plate](/Tutorials/docs/Laminar_Flat_Plate/)   
 Simulation of external, laminar flow over a flat plate.
+* [Laminar Cylinder](/Tutorials/docs/Laminar_Cylinder/)    
+Simulation of external, laminar flow around a 2D cylinder.
 * [Turbulent Flat Plate](/Tutorials/docs/Turbulent_Flat_Plate/)    
 Simulation of external, turbulent flow over a flat plate.
 * [Transitional Flat Plate](/Tutorials/docs/Transitional_Flat_Plate/)    

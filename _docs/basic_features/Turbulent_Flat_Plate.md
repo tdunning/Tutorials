@@ -7,10 +7,11 @@ permalink: /docs/Turbulent_Flat_Plate/
 
 ## Goals
 
-Upon completing this tutorial, the user will be familiar with performing a simulation of external, turbulent flow over a flat plate. Consequently, the following capabilities of SU2 will be verified against other codes and validated against theoretical results in this tutorial:
+Upon completing this tutorial, the user will be familiar with performing a simulation of external, turbulent flow over a flat plate. Consequently, the following capabilities of SU2 will be verified against other codes and theoretical results in this tutorial:
 - Steady, 2D RANS Navier-Stokes equations 
 - Spalart-Allmaras turbulence model
-- Roe 2nd-order numerical scheme in space
+- Roe convective scheme in space (2nd-order, upwind)
+- Corrected average-of-gradients viscous scheme
 - Euler implicit time integration
 - Inlet, Outlet, and Navier-Stokes Wall boundary conditions
 
@@ -24,13 +25,13 @@ Additionally, skin friction and velocity profiles corresponding to this testcase
 
 ## Tutorial
 
-The following tutorial will walk you through the steps required when solving for the turbulent flow over a flat plate using SU2. It is assumed you have already obtained and compiled the SU2_CFD code for a serial computation or both the SU2_CFD and SU2_SOL codes for a parallel computation. If you have yet to complete these requirements, please see the Download and Installation pages.
+The following tutorial will walk you through the steps required when solving for the turbulent flow over a flat plate using SU2. It is assumed you have already obtained and compiled the SU2_CFD code for a serial computation or both the SU2_CFD and SU2_SOL codes for a parallel computation. If you have yet to complete these requirements, please see the [Download](https://github.com/su2code/SU2/wiki/Download) and [Installation](https://github.com/su2code/SU2/wiki/Installation) pages.
 
 ### Background
 
-Turbulent flow over a zero pressure gradient flat plate is a common test case for the verification and validation of turbulence models in CFD solvers. The flow is everywhere turbulent and a boundary layer develops over the surface of the flat plate. The lack of separation bubbles or other more complex flow phenomena allows turbulence models to predict the flow with a high level of accuracy. Due to the choice of a low Mach number of 0.2 for this case, compressibility effects are essentially negligible. 
+Turbulent flow over a zero pressure gradient flat plate is a common test case for the verification of turbulence models in CFD solvers. The flow is everywhere turbulent and a boundary layer develops over the surface of the flat plate. The lack of separation or other more complex flow phenomena allows turbulence models to predict the flow with a high level of accuracy. Due to the choice of a low Mach number of 0.2 for this case, compressibility effects are essentially negligible. 
 
-For verification, we will be comparing SU2 results against those from the NASA codes FUN3D and CFL3D. For validation purposes we will compare profiles of u+ vs. y+ against theoretical profiles of the viscous sublayer and log law region.  
+For verification, we will be comparing SU2 results against those from the NASA codes FUN3D and CFL3D. We will also compare profiles of u+ vs. y+ against theoretical profiles of the viscous sublayer and log law region.  
 
 ### Problem Setup
 
@@ -38,24 +39,50 @@ The length of the flat plate is 2 meters, and it is represented by an adiabatic 
 
 ### Mesh Description
 
-The mesh used for this tutorial, which consists of 13,056 rectangular elements, is shown below.
+The mesh used for this tutorial, which consists of 13,056 quadrilateral elements (the 137x97 grid), is shown below. A finer 545x385 grid file is also available. Additional grids for the flat plate in this same family can be obtained from the NASA Turbulence Modeling resource page.
 
 ![Turb Plate Mesh](../../Turbulent_Flat_Plate/images/turb_plate_mesh_bcs.png)
-Figure (1): Mesh with boundary conditions (inlet, outlet, symmetry, wall).
+Figure (1): Mesh with boundary conditions: inlet (red), outlet (blue), symmetry (purple), wall (green).
 
 ### Configuration File Options
 
 Several of the key configuration file options for this simulation are highlighted here. For the first time in the tutorials, we will use a turbulence model:
+
 ```
+% ------------- DIRECT, ADJOINT, AND LINEARIZED PROBLEM DEFINITION ------------%
+%
 % Physical governing equations (EULER, NAVIER_STOKES,
-%                               WAVE_EQUATION, HEAT_EQUATION, LINEAR_ELASTICITY,
+%                               WAVE_EQUATION, HEAT_EQUATION, FEM_ELASTICITY,
 %                               POISSON_EQUATION)
 PHYSICAL_PROBLEM= NAVIER_STOKES
 %
-% If Navier-Stokes, kind of turbulent model (NONE, SA, SST)
+% Specify turbulence model (NONE, SA, SA_NEG, SST)
 KIND_TURB_MODEL= SA
 ```
-The governing equations are Navier-Stokes, but by entering `SA` as the option for `KIND_TURB_MODEL` we activate the RANS governing equations with the Spalart-Allmaras (SA) turbulence model. The SA model is composed of one-equation for a turbulence field variable that is directly related to the turbulent eddy viscosity. It is a popular choice for external aerodynamic flows, such as those around airfoils and wings. In previous tutorials, `NONE` has been chosen, resulting in the use of the laminar Navier-Stokes governing equations. The Shear Stress Transport model (SST) of Menter is also available in SU2.
+
+The governing equations are Navier-Stokes, but by entering `KIND_TURB_MODEL= SA` we activate the RANS governing equations with the Spalart-Allmaras (SA) turbulence model. The SA model is a 1-equation model for a turbulence field variable that is directly related to the turbulent eddy viscosity. It is a popular choice for external aerodynamic flows, such as those around airfoils and wings. In previous tutorials, `KIND_TURB_MODEL= NONE` has been chosen, resulting in the use of the laminar Navier-Stokes governing equations. The SA Negative model (SA_NEG) and the Shear Stress Transport model (SST) of Menter are also available in SU2.
+
+We must also specify suitable numerical methods for the solution of any additional turbulence equations:
+
+```
+% -------------------- TURBULENT NUMERICAL METHOD DEFINITION ------------------%
+%
+% Convective numerical method (SCALAR_UPWIND)
+CONV_NUM_METHOD_TURB= SCALAR_UPWIND
+%
+% Monotonic Upwind Scheme for Conservation Laws (TVD) in the turbulence equations.
+%           Required for 2nd order upwind schemes (NO, YES)
+MUSCL_TURB= NO
+%
+% Slope limiter (NONE, VENKATAKRISHNAN, VENKATAKRISHNAN_WANG,
+%                BARTH_JESPERSEN, VAN_ALBADA_EDGE)
+SLOPE_LIMITER_TURB= VENKATAKRISHNAN
+%
+% Time discretization (EULER_IMPLICIT)
+TIME_DISCRE_TURB= EULER_IMPLICIT
+```
+
+ A scalar upwind method and the corrected average-of-gradients method are the default schemes for the turbulent convective and viscous fluxes, respectively. However, the user has the option to compute the convective flux to 1st-order (`MUSCL_TURB= NO`), 2nd-order (`MUSCL_TURB= YES` and `SLOPE_LIMITER_TURB= NONE`), or 2nd-order with slope limiting (`MUSCL_TURB= YES` and `SLOPE_LIMITER_TURB` chosen from an option other than `NONE`).
 
 ### Running SU2
 

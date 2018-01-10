@@ -11,7 +11,8 @@ Upon completing this tutorial, the user will be familiar with performing an exte
 
 - Steady, 2D, incompressible RANS equations
 - Spalart-Allmaras (S-A) turbulence model with Bas-Cakmakcioglu (B-C) transition model
-- Roe 2nd-order numerical scheme in space
+- Roe convective scheme in space (2nd-order, upwind)
+- Corrected average-of-gradients viscous scheme
 - Euler implicit time integration
 - Inlet, Outlet, Symmetry and No-Slip Wall boundary conditions
 
@@ -22,11 +23,11 @@ Additionally, experimental skin friction data corresponding to this test case is
 
 ## Tutorial
 
-The following tutorial will walk you through the steps required when solving for the transitional flow over a flat plate using SU2. It is assumed you have already obtained and compiled the SU2_CFD code for a serial or parallel computation. If you have yet to complete these requirements, please see the Download and Installation pages.
+The following tutorial will walk you through the steps required when solving for the transitional flow over a flat plate using SU2. It is assumed you have already obtained and compiled the SU2_CFD code for a serial or parallel computation. If you have yet to complete these requirements, please see the [Download](https://github.com/su2code/SU2/wiki/Download) and [Installation](https://github.com/su2code/SU2/wiki/Installation) pages.
 
 ### Background
 
-Practically, most CFD analyses are carried out using full turbulence models which do not account for boundary layer transition. Using the turbulence models, the flow is everywhere fully turbulent, thus no separation bubbles or other complex flow phenomena involve. Introducing a transition model, the flow begins as laminar by damping the production term of the turbulence model until a point where a transition correlation is activated. Currently, Bas-Cakmakcioglu (B-C) transition model [2] that uses Spalart-Allmaras (S-A) as the baseline turbulence model is implemented in the SU2.
+Practically, most CFD analyses are carried out using fully turbulent fields that do not account for boundary layer transition. Given that the flow is everywhere turbulent, no separation bubbles or other complex flow phenomena evolve. A transition model can be introduced, however, such that the flow begins as laminar by damping the production term of the turbulence model until a point where a transition correlation is activated. Currently, the Bas-Cakmakcioglu (B-C) transition model [2] that uses Spalart-Allmaras (S-A) as the baseline turbulence model is implemented in SU2.
 
 For verification, we will be comparing SU2 results against the results of natural transition flat plate experiment of Schubauer & Klebanoff. The experimental data include skin friction coefficient distribution versus the local Reynolds number over the flat plate.
 
@@ -50,26 +51,24 @@ Several of the key configuration file options for this simulation are highlighte
 % Physical governing equations (EULER, NAVIER_STOKES,
 %                               WAVE_EQUATION, HEAT_EQUATION, 
 %                               LINEAR_ELASTICITY, POISSON_EQUATION)
-
 PHYSICAL_PROBLEM= NAVIER_STOKES
-
+%
 % Specify turbulent model (NONE, SA, SA_NEG, SST)
 KIND_TURB_MODEL= SA
-
+%
 % Specify transition model (NONE, BC)
 KIND_TRANS_MODEL= BC
-
+%
 % Specify Turbulence Intensity (%)
 FREESTREAM_TURBULENCEINTENSITY = 0.18
-
+%
 % Regime type (COMPRESSIBLE, INCOMPRESSIBLE, FREESURFACE)
 REGIME_TYPE= INCOMPRESSIBLE
-
 ```
 
-The governing equations are RANS with Spalart-Allmaras (SA) turbulence model. By entering `BC` as the option for `KIND_TRANS_MODEL`, Bas-Cakmakcioglu Algebraic Transition Model is activated. This model requires freestream turbulence intensity that is to be used in the transition correlation, thus `FREESTREAM_TURBULENCEINTENSITY` option is also used. The SA model is composed of one-equation for a turbulence field variable that is directly related to the turbulent eddy viscosity. The BC model achieves its purpose by modifying the production term of the SA model. The production term of the SA model is damped until a considerable amount of turbulent viscosity is generated, and after that point the damping effect of the transition model is disabled, thus a transition from laminar to turbulent flow is obtained.
+The governing equations are RANS with the Spalart-Allmaras (`SA`) turbulence model. By entering `KIND_TRANS_MODEL= BC`, the Bas-Cakmakcioglu Algebraic Transition Model is activated. This model requires freestream turbulence intensity that is to be used in the transition correlation, thus the `FREESTREAM_TURBULENCEINTENSITY` option is also used. The BC model achieves its purpose by modifying the production term of the 1-equation SA turbulence model. The production term of the SA model is damped until a considerable amount of turbulent viscosity is generated, and after that point, the damping effect on the transition model is disabled. Thus, a transition from laminar to turbulent flow is obtained.
 
-The incompressible freestream properties are specified as follows. (Please see "Notes" for freestream properties of other transitional flat plate test cases)
+The incompressible freestream properties are specified as follows. (Please see "Notes" for freestream properties of other transitional flat plate test cases).
 
 ```
 % Free-stream density (1.2886 Kg/m^3 (air), 998.2 Kg/m^3 (water))
@@ -80,10 +79,9 @@ FREESTREAM_VELOCITY= ( 50.1, 0.00, 0.00 )
 %
 % Free-stream viscosity (1.853E-5 Ns/m^2 (air), 0.798E-3 Ns/m^2 (water))
 FREESTREAM_VISCOSITY= 1.8e-05
-
 ```
 
-As it can be calculated, the Reynolds number for Schubauer&Klebanoff test case is 3.34e6 for a flat plate of 1 meters. However, in this test case, the length of the flat plate is 1.5 meters. Thus, in the configuration file `REYNOLDS_LENGTH = 1.0` and `REF_AREA= 1.5` are specified.
+The Reynolds number for the Schubauer & Klebanoff test case is 3.34e6 for 1 meter long flat plate. However, in this test case, the length of the flat plate is 1.5 meters. Thus, in the configuration file `REYNOLDS_LENGTH = 1.0` and `REF_AREA= 1.5` are specified.
 
 ### Running SU2
 
@@ -109,7 +107,7 @@ The figure below compares the skin friction results obtained by the B-C transiti
 
 ![SK_Cf_Rex](../../Transitional_Flat_Plate/images/Cf_Rex_SK.png)
 
-Figure (2): Comparison of the skin friction coefficients for Schubauer&Klebanoff case
+Figure (2): Comparison of the skin friction coefficients for the Schubauer & Klebanoff case.
 
 ## Notes
 

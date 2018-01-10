@@ -10,7 +10,7 @@ permalink: /docs/Inviscid_OneraM6/
 Upon completing this tutorial, the user will be familiar with performing a simulation of external, inviscid flow around a 3D geometry. The specific geometry chosen for the tutorial is the classic ONERA M6 wing. Consequently, the following capabilities of SU2 will be showcased in this tutorial:
 - Steady, 3D Euler equations 
 - Multigrid
-- JST numerical scheme in space
+- JST convective scheme in space (2nd-order, centered)
 - Euler implicit time integration
 - Euler Wall, Symmetry, and Far-field boundary conditions
 - Code parallelism (recommended)
@@ -23,7 +23,7 @@ The resources for this tutorial can be found in the [Inviscid_OneraM6](https://g
 
 ## Tutorial
 
-The following tutorial will walk you through the steps required when solving for the flow around the ONERA M6 using SU2. The tutorial will also address procedures for both serial and parallel computations. It is assumed that you have already obtained and compiled the SU2_CFD code for a serial computation or both the SU2_CFD and SU2_SOL codes for a parallel computation. If you have yet to complete these requirements, please see the [Download](https://github.com/su2code/SU2/wiki/Download) and [Installation](https://github.com/su2code/SU2/wiki/Installation) pages.
+The following tutorial will walk you through the steps required when solving for external flow past the ONERA M6 using SU2. The tutorial will also address procedures for both serial and parallel computations. It is assumed that you have already obtained and compiled the SU2_CFD code for a serial computation or both the SU2_CFD and SU2_SOL codes for a parallel computation. If you have yet to complete these requirements, please see the [Download](https://github.com/su2code/SU2/wiki/Download) and [Installation](https://github.com/su2code/SU2/wiki/Installation) pages.
 
 ### Background
 
@@ -40,9 +40,7 @@ These transonic flow conditions will cause the typical "lambda" shock along the 
 
 ### Mesh Description
 
-The computational domain is a large parallelepiped with the wing half-span on one boundary in the x-z plane. The mesh provided in the tutorial resources directory listed above is a relatively coarse mesh provided that will complete in less time, but provide less accurate results. Users interested in obtaining more accurate results should use the finer mesh ([mesh_ONERAM6_inv_FFD.su2](../../Constrained_Optimal_Shape_Design/mesh_ONERAM6_inv_FFD.su2)) and associated config file ([inv_oneram6_adv.cfg](../../Constrained_Optimal_Shape_Design/inv_oneram6_adv.cfg) provided in [Tutorials/Constrained_Optimal_Shape_Design](https://github.com/su2code/Tutorials/tree/master/Constrained_Optimal_Shape_Design). The results shown in this tutorial use the finer mesh. 
-
-The finer mesh consists of 582,752 tetrahedral elements and 108,396 nodes. Three boundary conditions are employed: Euler wall on the wing surface, a far-field characteristic-based condition on the far-field markers, and a symmetry boundary condition for the marker where the wing half-span is attached. The symmetry condition acts to mirror the flow about the x-z plane, reducing the complexity of the mesh and the computational cost. Images of the entire domain and the triangular elements on the wing surface are shown below.
+The computational domain is a large parallelepiped with the wing half-span mounted on one boundary in the x-z plane. The mesh consists of 582,752 tetrahedral elements and 108,396 nodes. Three boundary conditions are employed: Euler wall on the wing surface, a far-field characteristic-based condition on the far-field markers, and a symmetry boundary condition for the marker where the wing half-span is attached. The symmetry condition acts to mirror the flow about the x-z plane, reducing the complexity of the mesh and the computational cost. Images of the entire domain and the triangular elements on the wing surface are shown below.
 
 ![ONERA M6 Mesh](../../Inviscid_OneraM6/images/oneram6_mesh_bcs.png)
 Figure (1): Far-field view of the computational mesh with boundary conditions.
@@ -52,7 +50,8 @@ Figure (2): Close-up view of the unstructured mesh on the top surface of the ONE
 
 ### Configuration File Options
 
-Several of the key configuration file options for this simulation are highlighted here. The following describes how to set up 3D flow conditions in SU2:
+Several of the key configuration file options for this simulation are highlighted here. The following describes how to set up 3D flow conditions for compressible flow in SU2:
+
 ```
 % -------------------- COMPRESSIBLE FREE-STREAM DEFINITION --------------------%
 %
@@ -65,18 +64,19 @@ AOA= 3.06
 % Side-slip angle (degrees)
 SIDESLIP_ANGLE= 0.0
 %
-% Free-stream pressure (101325.0 N/m^2 by default, only for Euler equations)
+% Free-stream pressure (101325.0 N/m^2 by default)
 FREESTREAM_PRESSURE= 101325.0
 %
 % Free-stream temperature (288.15 K by default)
 FREESTREAM_TEMPERATURE= 288.15
 ```
 
-For an inviscid problem such as this, the flow conditions are completely defined by an input Mach number, flow direction, freestream pressure, and freestream temperature. The input Mach number is transonic at 0.8395. The freestream temperature and pressure have been set to standard sea level values for air at 101325.0 N/m2 and 288.15 K, respectively. The flow field will be initialized to these freestream values everywhere in the domain.
+For an inviscid problem such as this, the flow conditions are completely defined by an input Mach number, flow direction, freestream pressure, and freestream temperature. The input Mach number is transonic at 0.8395. The freestream temperature and pressure have been set to standard sea level values for air at 101325.0 N/m^2 and 288.15 K, respectively. The flow field will be initialized to these freestream values everywhere in the domain.
 
-Lastly, it is very important to note the definition of the freestream flow direction in 3D. The default freestream direction (`AOA = 0.0` degrees and `SIDESLIP_ANGLE = 0.0` degrees) is along the positive x-axis without any components in the y- or z-directions. Referring to Figure (1), we see that `AOA = 3.06` degrees will result in a non-zero freestream velocity in the positive z-direction. While zero for this problem, setting the `SIDESLIP_ANGLE` to a non-zero value would result in a non-zero velocity component in the y-direction. In 2D, the flow is in the x-y plane. While the default freestream direction is still along the positive x-axis, a non-zero AOA value for 2D problems will result in a non-zero freestream velocity in the y-direction. The `SIDESLIP_ANGLE` variable is unused in 2D.
+Lastly, it is very important to note the definition of the freestream flow direction in 3D. The default freestream direction (`AOA = 0.0` degrees and `SIDESLIP_ANGLE = 0.0` degrees) is aligned with the positive x-axis without any components in the y- or z-directions. Referring to Figure (1), we see that `AOA = 3.06` degrees will result in a non-zero freestream velocity in the positive z-direction. While zero for this problem, setting the `SIDESLIP_ANGLE` to a non-zero value would result in a non-zero velocity component in the y-direction. In 2D, the flow is in the x-y plane. While the default freestream direction is still along the positive x-axis, a non-zero AOA value for 2D problems will result in a non-zero freestream velocity in the *y-direction*. The `SIDESLIP_ANGLE` variable is unused in 2D.
 
-In order to define reference values (for non-dimen. purposes):
+The user can define reference values for non-dimensionalization and force computation purposes:
+
 ```
 % ---------------------- REFERENCE VALUE DEFINITION ---------------------------%
 %
@@ -85,8 +85,8 @@ REF_ORIGIN_MOMENT_X = 0.25
 REF_ORIGIN_MOMENT_Y = 0.00
 REF_ORIGIN_MOMENT_Z = 0.00
 %
-% Reference length for pitching, rolling, and yawing non-dimensional moment
-REF_LENGTH_MOMENT= 1.0
+% Reference length for pitching, rolling, and yaMAIN_BOX non-dimensional moment
+REF_LENGTH= 1.0
 %
 % Reference area for force coefficients (0 implies automatic calculation)
 REF_AREA= 0
@@ -96,9 +96,12 @@ REF_AREA= 0
 REF_DIMENSIONALIZATION= FREESTREAM_VEL_EQ_ONE
 ```
 
-SU2 accepts arbitrary reference values for computing the force coefficients. A reference area can be supplied by the user for the calculation of force coefficients (e.g. a trapezoidal wing area) with the `REF_AREA` variable. If `REF_AREA` is set equal to zero, as for the ONERA M6, a reference area will be automatically calculated by summing all surface normal components in the positive z-direction on the monitored markers. For this ONERA M6 case SU2 performs a non-dimensional simulation (`REF_DIMENSIONALIZATION= FREESTREAM_VEL_EQ_ONE`). If you wish to perform a dimensional simulation you can pick the `DIMENSIONAL` option. For non-dimensionalization case `FREESTREAM_PRESS_EQ_ONE` the free-stream values at the farfield will be (pressure=1.0, density=1.0, temperature=1.0). For `FREESTREAM_VEL_EQ_MACH` the free-stream values at the farfield will be (velocity=MACH, density=1.0, temperature=1.0) and for `FREESTREAM_VEL_EQ_ONE` the free-stream values at the farfield will be (velocity=1.0, density=1.0, temperature=1.0).
+SU2 accepts arbitrary reference values for computing the force coefficients. A reference area can be supplied by the user for the calculation of force coefficients (e.g., a trapezoidal wing area) with the `REF_AREA` variable. If `REF_AREA` is set equal to zero, as for the ONERA M6, a reference area will be automatically calculated by summing all surface normal components in the positive z-direction on the monitored markers for 3D calculations. 
 
-Finally, we discuss some key multigrid options:
+For this ONERA M6 case, SU2 performs a non-dimensional simulation (`REF_DIMENSIONALIZATION= FREESTREAM_VEL_EQ_ONE`). This option controls your non-dim. scheme for compressible flow problems. If you wish to perform a dimensional simulation you can pick the `DIMENSIONAL` option. For non-dimensionalization case `FREESTREAM_PRESS_EQ_ONE` the free-stream values at the far-field will be (pressure = 1.0, density = 1.0, temperature = 1.0). For `FREESTREAM_VEL_EQ_MACH` the free-stream values at the far-field will be (velocity = Mach number, density = 1.0, temperature = 1.0) and for `FREESTREAM_VEL_EQ_ONE` the free-stream values at the far-field will be (velocity = 1.0, density = 1.0, temperature = 1.0).
+
+Finally, we discuss some important multigrid options:
+
 ```
 % -------------------------- MULTIGRID PARAMETERS -----------------------------%
 %
@@ -107,9 +110,26 @@ MGLEVEL= 3
 %
 % Multi-grid cycle (V_CYCLE, W_CYCLE, FULLMG_CYCLE)
 MGCYCLE= W_CYCLE
+%
+% Multi-Grid PreSmoothing Level
+MG_PRE_SMOOTH= ( 1, 2, 3, 3 )
+%
+% Multi-Grid PostSmoothing Level
+MG_POST_SMOOTH= ( 0, 0, 0, 0 )
+%
+% Jacobi implicit smoothing of the correction
+MG_CORRECTION_SMOOTH= ( 0, 0, 0, 0 )
+%
+% Damping factor for the residual restriction
+MG_DAMP_RESTRICTION= 0.9
+%
+% Damping factor for the correction prolongation
+MG_DAMP_PROLONGATION= 0.9
 ```
 
-SU2 contains an agglomeration multigrid algorithm for convergence acceleration technique where the original mesh is automatically agglomerated into a series of coarser representations, and calculations are performed on all mesh levels with each solver iteration in order to provide a better residual update. The user can set the number of multigrid levels using the MGLEVEL option. If this is set to zero, multigrid will be turned off, and only the original (fine) mesh will be used. An integer number of levels can be chosen. The ONERA M6 test case uses 3 levels of coarser meshes along with the original mesh for a total of 4 mesh levels. The type of cycle (V or W) can also be specified, and in general, while more computationally intensive, a W-cycle provides better convergence rates.
+SU2 contains an agglomeration multigrid algorithm for convergence acceleration (a Full-Approximation Storage, or FAS, multigrid) where the original mesh is automatically agglomerated into a series of coarser representations, and smoothing iterations are performed on all mesh levels with each non-linear solver iteration in order to provide a better residual update. The user can set the number of multigrid levels using the `MGLEVEL` option. If this is set to zero, multigrid will be turned off, and only the original (fine) mesh will be used. An integer number of levels can be chosen. The ONERA M6 test case uses 3 levels of coarser meshes along with the original mesh for a total of 4 mesh levels. The type of cycle (V or W) can also be specified, and in general, while more computationally intensive, a W-cycle provides better convergence rates. There are additional tuning parameters that control the number of pre- and post-smoothing iterations on each level (`MG_PRE_SMOOTH`, `MG_POST_SMOOTH`, and `MG_CORRECTION_SMOOTH`), along with damping factors that can help in achieving stability (`MG_DAMP_RESTRICTION` and `MG_DAMP_PROLONGATION`). 
+
+It is important to note that the performance of the multigrid algorithm is highly-dependent on the initial grid and that the agglomeration is impacted by parallel partitioning: considerable tuning and experimentation with these parameters can be required. If you are having trouble tuning the multigrid, it is recommended to turn it off (set `MGLEVEL = 0`) and to try with a higher CFL number on the fine grid alone while converging the implicit system to a tighter tolerance (use the `LINEAR_SOLVER_ERROR` and `LINEAR_SOLVER_ITER` options).
 
 ### Running SU2
 
@@ -117,7 +137,7 @@ Instructions for running this test case are given here for both serial and paral
 
 #### In Serial
 
-The wing simulation is relatively large, but should still fit on a single-core machine. To run this test case, follow these steps at a terminal command line:
+The wing simulation is relatively large for a single-core calculation, but is still reasonable due to the high convergence rate of this inviscid case. To run this test case, follow these steps at a terminal command line:
  1. Move to the directory containing the config file ([inv_ONERAM6.cfg](../../Inviscid_OneraM6/inv_ONERAM6.cfg)) and the mesh file ([mesh_ONERAM6_inv_ffd.su2](../../Inviscid_OneraM6/mesh_ONERAM6_inv_ffd.su2)). Make sure that the SU2 tools were compiled, installed, and that their install location was added to your path.
  2. Run the executable by entering 
  
@@ -130,7 +150,7 @@ The wing simulation is relatively large, but should still fit on a single-core m
 
 #### In Parallel
 
-If SU2 has been built with parallel support, the recommended method for running a parallel simulation is through the use of the parallel_computation.py python script. This automatically handles the execution of SU2_CFD, and the writing of the solution files using SU2_SOL. Follow these steps to run the ONERA M6 case in parallel:
+If SU2 has been built with parallel support, the recommended method for running a parallel simulation is through the use of the parallel_computation.py python script. This automatically handles the execution of SU2_CFD and the writing of the solution vizualization files using SU2_SOL. Follow these steps to run the ONERA M6 case in parallel:
  1. Move to the directory containing the config file ([inv_ONERAM6.cfg](../../Inviscid_OneraM6/inv_ONERAM6.cfg)) and the mesh file ([mesh_ONERAM6_inv_ffd.su2](../../Inviscid_OneraM6/mesh_ONERAM6_inv_ffd.su2)). Make sure that the SU2 tools were compiled, installed, and that their install location was added to your path.
  2. Run the python script by entering 
  

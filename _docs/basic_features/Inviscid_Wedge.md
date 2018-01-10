@@ -7,10 +7,10 @@ permalink: /docs/Inviscid_Wedge/
 
 ## Goals
 
-Upon completing this tutorial, the user will be familiar with performing a simulation of supersonic, inviscid flow over a 2-D geometry. The specific geometry chosen for the tutorial is a simple wedge. Consequently, the following capabilities of SU2 will be showcased in this tutorial:
-- Steady, 2-D Euler equations 
+Upon completing this tutorial, the user will be familiar with performing a simulation of supersonic, inviscid flow over a 2D geometry. The specific geometry chosen for the tutorial is a simple wedge in a channel. Consequently, the following capabilities of SU2 will be showcased in this tutorial:
+- Steady, 2D Euler equations 
 - Multigrid
-- HLLC numerical scheme in space
+- HLLC convective scheme in space (2nd-order, upwind)
 - Euler implicit time integration
 - Supersonic Inlet, Outlet, and Euler Wall boundary conditions
 
@@ -26,7 +26,7 @@ The following tutorial will walk you through the steps required when solving for
 
 ### Background
 
-This example uses a 2-D geometry which features a wedge along the solid lower wall. In supersonic flow, this wedge will create an oblique shock, and its properties can be predicted from the oblique-shock relations for a perfect gas (see your favorite compressible fluids textbook for more information). This is a common test case for CFD codes due to its simplicity along with the ability to verify the code against the oblique-shock relations.
+This example uses a 2D geometry which features a wedge along the solid lower wall. In supersonic flow, this wedge will create an oblique shock, and its properties can be predicted from the oblique-shock relations for a perfect gas (see your favorite compressible fluids textbook for more information). This is a common test case for CFD codes due to its simplicity along with the ability to verify the code against the oblique-shock relations.
 
 ### Problem Setup
 
@@ -43,11 +43,14 @@ The wedge mesh is a structured mesh (75x50) of rectangular elements with a total
 ![Wedge Mach](../../Inviscid_Wedge/images/wedge_mesh_bcs.png)
 Figure (1): The computational mesh with boundary conditions highlighted.
 
-For this test case, the inlet marker will be set to a `MARKER_SUPERSONIC_INLET` boundary condition, while the outlet marker will be set to the `MARKER_OUTLET` condition. In supersonic flow, all characteristics point into the domain at the entrance (inlet marker), and therefore, all flow quantities can be specified, i.e., no information travels upstream. At the exit, however, all characteristics are outgoing, meaning that no information about the exit conditions is required. Therefore, the outlet marker is set to the outlet boundary condition which, in supersonic flow, simply extrapolates the flow variables from the interior domain to the exit. In practice, a low back pressure is supplied to the `MARKER_OUTLET` boundary condition in the configuration file, but the propagation of information in this supersonic flow make it unnecessary information.
+For this test case, the inlet marker will be set to a `MARKER_SUPERSONIC_INLET` boundary condition, while the outlet marker will be set to the `MARKER_OUTLET` condition. In supersonic flow, all characteristics are incoming to the domain at the entrance (inlet marker), and therefore, all flow quantities can be specified, i.e., no information travels upstream. 
+
+At the exit, however, all characteristics are outgoing, meaning that no information about the exit conditions is required. Therefore, the outlet marker is set to the outlet boundary condition which, in supersonic flow, simply extrapolates the flow variables from the interior domain to the exit. In practice, a low back pressure is supplied to the `MARKER_OUTLET` boundary condition in the configuration file, but the propagation of information in this supersonic flow make it unnecessary information.
 
 ### Configuration File Options
 
 Several of the key configuration file options for working with CGNS meshes are given here. The latest version of SU2 ships with the source code for the CGNS library, and it will automatically be built and linked during the SU2 compilation process. Here, we will discuss a few options in the wedge configuration file as a practical example for getting your own CGNS mesh files working:
+
 ```
 % ------------------------- INPUT/OUTPUT INFORMATION --------------------------%
 %
@@ -57,7 +60,9 @@ MESH_FILENAME= mesh_wedge_inv.cgns
 % Mesh input file format (SU2, CGNS)
 MESH_FORMAT= CGNS
 ```
-To use the supplied CGNS mesh, simply enter the filename and make sure that the `MESH_FORMAT` option is set to CGNS. The output written to the console during this process might look like the following for the supersonic wedge mesh:
+
+To use the supplied CGNS mesh, simply enter the filename and make sure that the `MESH_FORMAT` option is set to CGNS. The output written to the console during the grid reading process during runtime might look like the following for the supersonic wedge mesh:
+
 ```
 ---------------------- Read Grid File Information -----------------------
 Reading the CGNS file: mesh_wedge_inv.cgns.
@@ -66,9 +71,9 @@ Database 1, Base: 1 zone(s), cell dimension of 2, physical dimension of 3.
 Zone 1, dom-1: 3750 vertices, 3626 cells, 0 boundary vertices.
 Reading grid coordinates.
 Number of coordinate dimensions is 3.
-Loading CoordinateX values into linear partitions.
-Loading CoordinateY values into linear partitions.
-Loading CoordinateZ values into linear partitions.
+Loading CoordinateX values.
+Loading CoordinateY values.
+Loading CoordinateZ values.
 Number of connectivity sections is 5.
 Loading section QuadElements of element type Quadrilateral.
 Loading section inlet of element type Line.
@@ -88,18 +93,17 @@ Two dimensional problem.
 74 boundary elements in index 3 (Marker = upper).
 3626 quadrilaterals.
 ```
-SU2 prints out information on the CGNS mesh including the filename, the number of points, and the number of elements. Another useful piece of information is the listing of the sections within the mesh. These descriptions give the type of elements for the section as well as any name given to it. For instance, when the inlet boundary information is read, SU2 prints "Loading section inlet of element type Line" to the console. This information can be used to verify that your mesh is being read correctly, or to help you remember, or even learn for the first time, the names for each of the boundary markers.
 
-A converter for creating .su2 meshes from CGNS meshes is built directly into SU2_DEF, along with many other facilities for manipulating and deforming grids (e.g., scaling, translating, rotating). First, we set several options that are used by SU2_DEF in order to convert the mesh. We will take advantage of the `SCALE` capability (`DV_KIND`) while setting the scale factor 1.0 in the `DV_VALUE` option. List *all* of the markers within the mesh in `DV_MARKER` option in order to perform a direct scaling of the mesh, i.e., every grid point location will be multiplied by the scaling factor in all dimensions. This will result in a 1-to-1 conversion of the mesh from the CGNS format to the SU2 native format, and the same process can be used to scale any mesh:
+SU2 prints out information about the CGNS mesh including the filename, the number of points, and the number of elements. Another useful piece of information is the listing of the sections within the mesh. These descriptions give the type of elements for the section as well as any name given to it. For instance, when the inlet boundary information is read, SU2 prints "Loading section inlet of element type Line" to the console. This information can be used to verify that your mesh is being read correctly, or to help you remember (or even to learn for the first time) the names for each of the boundary markers that you will need for specifying boundary conditions in the config file.
+
+A converter for creating native .su2 meshes from CGNS meshes is built directly into SU2_DEF, along with many other facilities for manipulating and deforming grids (e.g., scaling, translating, rotating). We will discuss many more capabilities of SU2_DEF in future tutorials, especially features needed for design parameterization and mesh deformation for optimal shape design.
+
+First, we set several options that are used by SU2_DEF in order to convert the mesh. We will take advantage of the `SCALE` capability (`DV_KIND`) while setting the scale factor 1.0 in the `DV_VALUE` option. List *all* of the markers within the mesh in `DV_MARKER` option in order to perform a direct scaling of the mesh, i.e., every grid point location will be multiplied by the scaling factor in all dimensions. This will result in a 1-to-1 conversion of the mesh from the CGNS format to the SU2 native format. 
+
 ```
 % ----------------------- DESIGN VARIABLE PARAMETERS --------------------------%
 %
-% Kind of deformation (TRANSLATION, ROTATION, SCALE,
-%                      FFD_SETTING,
-%                      FFD_CONTROL_POINT, FFD_CAMBER, FFD_THICKNESS
-%                      FFD_DIHEDRAL_ANGLE, FFD_TWIST_ANGLE, FFD_ROTATION,
-%                      FFD_CONTROL_POINT_2D, FFD_CAMBER_2D, FFD_THICKNESS_2D,
-%                      HICKS_HENNE, PARABOLIC, NACA_4DIGITS, AIRFOIL)
+% Kind of deformation (TRANSLATION, ROTATION, SCALE)
 DV_KIND= SCALE
 %
 % Marker of the surface in which we are going apply the shape deformation
@@ -109,35 +113,26 @@ DV_MARKER= ( upper, lower, inlet, outlet )
 % - TRANSLATION ( x_Disp, y_Disp, z_Disp )
 % - ROTATION ( x_Orig, y_Orig, z_Orig, x_End, y_End, z_End )
 % - SCALE ( 1.0 )
-% - FFD_SETTING ( 1.0 )
-% - FFD_CONTROL_POINT ( FFD_BoxTag, i_Ind, j_Ind, k_Ind, x_Disp, y_Disp, z_Disp )
-% - FFD_CAMBER ( FFD_BoxTag, i_Ind, j_Ind )
-% - FFD_THICKNESS ( FFD_BoxTag, i_Ind, j_Ind )
-% - FFD_DIHEDRAL_ANGLE ( FFD_BoxTag, x_Orig, y_Orig, z_Orig, x_End, y_End, z_End )
-% - FFD_TWIST_ANGLE ( FFD_BoxTag, x_Orig, y_Orig, z_Orig, x_End, y_End, z_End )
-% - FFD_ROTATION ( FFD_BoxTag, x_Orig, y_Orig, z_Orig, x_End, y_End, z_End )
-% - FFD_CONTROL_POINT_2D ( FFD_BoxTag, i_Ind, j_Ind, x_Disp, y_Disp )
-% - FFD_CAMBER_2D ( FFD_BoxTag, i_Ind )
-% - FFD_THICKNESS_2D ( FFD_BoxTag, i_Ind )
-% - HICKS_HENNE ( Lower Surface (0)/Upper Surface (1)/Only one Surface (2), x_Loc )
-% - PARABOLIC ( Center, Thickness )
-% - NACA_4DIGITS ( 1st digit, 2nd digit, 3rd and 4th digit )
-% - AIRFOIL ( 1.0 )
 DV_PARAM= ( 1.0 )
 %
-% Value of the shape deformation
+% Value of the deformation
 DV_VALUE= 1.0
 ```
-Provide a name for the converted mesh to be written (set to "mesh_out.su2" by default)
+
+Provide a name for the converted mesh to be written (set to "mesh_out.su2" by default):
+
 ```
 % Mesh output file
 MESH_OUT_FILENAME= mesh_out.su2
 ```
-and lastly, run the SU2_DEF module
+
+and lastly, run the SU2_DEF module:
+
 ```
 $ SU2_DEF inv_Wedge_HLLC.cfg
 ```
-You will now have a new mesh in the current working directory named "mesh_out.su2" that is in the SU2 native format.
+
+You will now have a new mesh in the current working directory named "mesh_out.su2" that is in the SU2 native format. To use it, adjust the `MESH_FILENAME` and `MESH_FORMAT` options. The same process can be used to scale any mesh by entering a scale factor larger or smaller than 1.0.
 
 ### Running SU2
 
