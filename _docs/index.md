@@ -40,7 +40,7 @@ Simulation of external, viscous flow around a 3D geometry using a turbulence mod
 
 * [Unconstrained shape design of a transonic inviscid airfoil](/Tutorials/docs/NACA0012_Design)
 Perform an optimal shape design of a 2D geometry without constraints.
-* [Constrained shape design of a transonic turbulent airfoil at a cte. C<sup>L</sup>](/Tutorials/docs/RAE2822_Design)
+* [Constrained shape design of a transonic turbulent airfoil at a cte. C<sub>L</sub>](/Tutorials/docs/RAE2822_Design)
 Perform an optimal shape design of a 2D geometry with flow and geometrical constraints.
-* [Constrained shape design of a transonic inviscid wing at a cte. C<sup>L</sup>](/Tutorials/docs/ONERAM6_Design)
+* [Constrained shape design of a transonic inviscid wing at a cte. C<sub>L</sub>](/Tutorials/docs/ONERAM6_Design)
 Perform an optimal shape design of a 3D geometry with geometrical constraints.

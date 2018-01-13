@@ -1,6 +1,6 @@
 ---
-title: Optimal Shape Design of a Transonic Airfoil
-permalink: /docs/Transonic_Airfoil/
+title: Constrained Shape Design of a Viscous Transonic Airfoil
+permalink: /docs/RAE2822_Design/
 ---
 
 ![Optimization Diagram](../../Optimal_Shape_Design/images/optimization_diagram.png)

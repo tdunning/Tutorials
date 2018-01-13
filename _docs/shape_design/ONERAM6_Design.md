@@ -1,6 +1,6 @@
 ---
-title: Constrained Optimal Shape Design of a Fixed Wing
-permalink: /docs/Constrained_Fixed_Wing/
+title: Constrained Shape Design of a Inviscid Transonic Wing
+permalink: /docs/ONERAM6_Design/
 ---
 
 ![Opt. ONERA Orig](../../Constrained_Optimal_Shape_Design/images/onera_opt_history.png)

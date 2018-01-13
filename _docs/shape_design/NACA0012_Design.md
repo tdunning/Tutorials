@@ -1,6 +1,6 @@
 ---
-title: Optimal Shape Design of a Transonic Airfoil
-permalink: /docs/Transonic_Airfoil/
+title: Unconstrained Shape Design of an Inviscid Transonic Airfoil
+permalink: /docs/NACA0012_Design/
 ---
 
 ![Optimization Diagram](../../Optimal_Shape_Design/images/optimization_diagram.png)

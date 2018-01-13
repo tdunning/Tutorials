@@ -14,7 +14,8 @@
   - Transitional_Flat_Plate
   - Turbulent_OneraM6
 
-- title: Optimal Shape Design
+- title: Shape Design
   docs:
-  - Transonic_Airfoil
-  - Constrained_Fixed_Wing
+  - NACA0012_Design
+  - RAE2822_Design
+  - ONERAM6_Design
