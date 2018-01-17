@@ -7,7 +7,7 @@ permalink: /docs/NACA0012_Design/
 
 ## Goals
 
-For this tutorial, we return to the classic NACA 0012 test case that was the subject of the [Quick Start](https://github.com/su2code/SU2/wiki/Quick-Start) and perform aerodynamic shape design. Upon completing this tutorial, the user will be familiar with performing an optimal shape design of a 2D geometry. The initial geometry chosen for the tutorial is the NACA 0012 airfoil in transonic, inviscid flow. This tutorial is mean to be an introduction for using the components of SU2 for shape design in the context of a simple, unconstrained optimization problem. Consequently, the following SU2 tools will be showcased in this tutorial:
+For this tutorial, we return to the classic NACA 0012 test case that was the subject of the [Quick Start](https://github.com/su2code/SU2/wiki/Quick-Start) and perform aerodynamic shape design. Upon completing this tutorial, the user will be familiar with performing an optimal shape design of a 2D geometry. The initial geometry chosen for the tutorial is the NACA 0012 airfoil in transonic, inviscid flow. This tutorial is meant to be an introduction for using the components of SU2 for shape design in the context of a simple, unconstrained optimization problem. Consequently, the following SU2 tools will be showcased in this tutorial:
 - **SU2_CFD** - performs the direct and the adjoint flow simulations
 - **SU2_DOT** - projects the adjoint surface sensitivities into the design space to obtain the gradient
 - **SU2_DEF** - deforms the geometry and mesh with changes in the design variables during the shape optimization process
